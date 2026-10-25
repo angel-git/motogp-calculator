@@ -98,7 +98,6 @@ select {
 }
 
 .lede {
-  max-width: 52ch;
   color: var(--text-muted);
 }
 
