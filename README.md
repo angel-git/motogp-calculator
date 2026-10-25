@@ -6,6 +6,10 @@ championship standings and projected champion.
 
 See it live here: https://angel-git.github.io/motogp-calculator/
 
+
+<img width="1408" height="885" alt="Screenshot 2026-10-25 at 22 20 08" src="https://github.com/user-attachments/assets/63fc1d71-5bbb-41c3-8149-93315e6dbf96" />
+
+
 ## Requirements
 
 - Node.js 20.8 or newer (Vite 6 requires Node 18+ / 20+ / 22+)
