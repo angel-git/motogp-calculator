@@ -32,7 +32,7 @@ const page = el('main', 'page');
 
 const masthead = el('header', 'masthead');
 const eyebrow = el('p', 'eyebrow', `MotoGP · ${season2026.year}`);
-const title = el('h1', '', 'Championship Predictor');
+const title = el('h1', '', 'MotoGP Calculator');
 const lede = el(
   'p',
   'lede',
