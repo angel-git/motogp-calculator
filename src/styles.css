@@ -716,26 +716,31 @@ select {
   }
 
   .standings-table {
-    font-size: 0.78rem;
+    font-size: 0.74rem;
+  }
+
+  .standings-table th {
+    font-size: 0.56rem;
+    letter-spacing: 0.02em;
   }
 
   .standings-table th,
   .standings-table td {
-    padding: 0.45rem 0.35rem;
+    padding: 0.45rem 0.25rem;
   }
 
   .standings-table th:first-child,
   .standings-table td:first-child {
-    padding-left: 0.85rem;
+    padding-left: 0.7rem;
   }
 
   .standings-table th:last-child,
   .standings-table td:last-child {
-    padding-right: 0.85rem;
+    padding-right: 0.7rem;
   }
 
   .standings-table__position {
-    width: 2rem;
+    width: 1.6rem;
   }
 
   .standings-table__rider {
@@ -746,11 +751,25 @@ select {
     white-space: normal;
   }
 
+  .standings-table .rider-number {
+    min-width: 1.5rem;
+    padding: 0.08rem 0.3rem;
+    font-size: 0.64rem;
+  }
+
   .standings-table__team {
     display: none;
   }
 
   .position-row__points {
     min-width: 2.1rem;
+  }
+}
+
+/* On very narrow phones the five-column table cannot fit; drop the starting
+   points column and keep the simulated delta and total. */
+@media (max-width: 22rem) {
+  .standings-table__points--current {
+    display: none;
   }
 }

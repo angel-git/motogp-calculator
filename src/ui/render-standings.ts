@@ -44,7 +44,7 @@ export function createStandingsPanel({
   for (const [label, className] of [
     ['Pos', 'standings-table__position'],
     ['Rider', 'standings-table__rider'],
-    ['Current', 'standings-table__points'],
+    ['Current', 'standings-table__points standings-table__points--current'],
     ['Simulated', 'standings-table__points'],
     ['Total', 'standings-table__points'],
   ] as const) {
@@ -121,7 +121,7 @@ export function createStandingsPanel({
 
       const current = el(
         'td',
-        'standings-table__points',
+        'standings-table__points standings-table__points--current',
         String(standing.startingPoints),
       );
       const simulated = el(
