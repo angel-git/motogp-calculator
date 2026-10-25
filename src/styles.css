@@ -559,6 +559,12 @@ select {
   white-space: nowrap;
 }
 
+/* `.standings-table th` is more specific than the shared points class, so
+   repeat the alignment for the numeric column headers. */
+.standings-table th.standings-table__points {
+  text-align: right;
+}
+
 .standings-table__points--simulated {
   color: var(--text-dim);
 }
