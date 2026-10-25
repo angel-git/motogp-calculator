@@ -24,9 +24,31 @@ npm run test:watch  # watch mode
 ```
 
 The suite covers the season data and validation layer in
-`tests/season-data.test.ts`, plus the scoring engine in `tests/scoring.test.ts`,
-the countback rules in `tests/tiebreak.test.ts`, and championship aggregation in
-`tests/championship.test.ts`.
+`tests/season-data.test.ts`, the scoring engine in `tests/scoring.test.ts`, the
+countback rules in `tests/tiebreak.test.ts`, championship aggregation in
+`tests/championship.test.ts`, and the race-editor state rules in
+`tests/scenario-state.test.ts`.
+
+## Using the race editor
+
+The remaining weekends are grouped by round and can be expanded or collapsed.
+Sprint and Grand Prix sessions have one dropdown per scoring position:
+
+- Fill positions from first place down. The next position unlocks once the
+  previous one is filled.
+- A rider already selected in a session is disabled in that session's other
+  positions, so the same rider cannot occupy two positions.
+- Selecting "— Clear —" in a position clears that position and every position
+  after it.
+- Each session shows whether it is not simulated, incomplete, or complete.
+  Partial results are deliberate: only the filled positions score, and the
+  standings panel calls out incomplete sessions.
+- The projected standings are recalculated from the starting standings plus the
+  current scenario after every change. They are never stored separately.
+
+Only scoring positions are editable (the top 9 in a Sprint and the top 15 in a
+Grand Prix). Deeper classifications do not award points and are not modelled in
+the editor.
 
 ### Scoring engine assumptions
 
