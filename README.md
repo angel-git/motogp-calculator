@@ -4,6 +4,8 @@ A small, static web app for entering hypothetical finishing positions for the
 remaining MotoGP Sprint and Grand Prix races and seeing the resulting
 championship standings and projected champion.
 
+See it live here: https://angel-git.github.io/motogp-calculator/
+
 ## Requirements
 
 - Node.js 20.8 or newer (Vite 6 requires Node 18+ / 20+ / 22+)
