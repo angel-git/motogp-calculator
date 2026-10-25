@@ -77,6 +77,15 @@ describe('scoreEvent', () => {
     });
   });
 
+  it('skips unfilled slots without shifting the riders after them', () => {
+    const finishes = scoreEvent('grandPrix', [null, 'rider-1', null, 'rider-2'], RULES);
+
+    expect(finishes).toEqual([
+      { riderId: 'rider-1', position: 2, points: 20 },
+      { riderId: 'rider-2', position: 4, points: 13 },
+    ]);
+  });
+
   it('rejects duplicate riders and empty rider IDs', () => {
     expect(() =>
       scoreEvent('grandPrix', ['marc-marquez', 'marc-marquez'], RULES),

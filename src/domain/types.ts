@@ -94,13 +94,18 @@ export interface Season {
   remainingEvents: readonly Event[];
 }
 
+/** A finishing position in a hypothetical result, or null when unfilled. */
+export type ResultSlot = RiderId | null;
+
 /**
- * Hypothetical results keyed by event ID. Each value lists rider IDs from
- * winner onwards. An event that is absent has not been simulated. A present
- * list may cover only some positions; only the listed positions score.
+ * Hypothetical results keyed by event ID. Each value lists positions from
+ * winner onwards, where a null entry marks an unfilled position in the middle
+ * of a partial classification. An event that is absent has not been simulated.
+ * A present list may cover only some positions; only the filled positions
+ * score.
  */
 export interface Scenario {
-  results: Readonly<Record<EventId, readonly RiderId[]>>;
+  results: Readonly<Record<EventId, readonly ResultSlot[]>>;
 }
 
 /** A projected standing after applying a scenario to the starting standings. */

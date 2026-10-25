@@ -41,7 +41,7 @@ function event(id: string, type: EventType, round = 1): Event {
 function projectionFor(
   standings: readonly Standing[],
   events: readonly Event[],
-  results: Record<string, readonly string[]>,
+  results: Record<string, readonly (string | null)[]>,
 ) {
   return calculateChampionship(standings, events, { results }, RULES);
 }
@@ -111,11 +111,32 @@ describe('calculateChampionship', () => {
     ).toMatchObject({ simulatedPoints: 0, points: 90 });
   });
 
+  it('keeps the finishing position of riders after an unfilled slot', () => {
+    const standings = [standing(1, 'a', 100), standing(2, 'b', 90)];
+    const events = [event('gp-1', 'grandPrix')];
+
+    const projection = projectionFor(standings, events, {
+      // First place is unfilled, so the listed rider is classified second.
+      'gp-1': [null, 'a'],
+    });
+
+    expect(
+      projection.standings.find((entry) => entry.riderId === 'a'),
+    ).toMatchObject({ simulatedPoints: 20, points: 120 });
+    expect(
+      projection.standings.find((entry) => entry.riderId === 'b'),
+    ).toMatchObject({ simulatedPoints: 0, points: 90 });
+    expect(projection.simulatedEvents).toEqual(['gp-1']);
+  });
+
   it('awards nothing for unsimulated or empty events', () => {
     const standings = [standing(1, 'a', 100), standing(2, 'b', 90)];
     const events = [event('sprint-1', 'sprint'), event('gp-1', 'grandPrix')];
 
-    const projection = projectionFor(standings, events, { 'gp-1': [] });
+    const projection = projectionFor(standings, events, {
+      'gp-1': [],
+      'sprint-1': [null, null],
+    });
 
     expect(projection.simulatedEvents).toEqual([]);
     expect(projection.standings.every((entry) => entry.simulatedPoints === 0)).toBe(

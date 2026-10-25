@@ -36,12 +36,12 @@ countback rules in `tests/tiebreak.test.ts`, championship aggregation in
 The remaining weekends are grouped by round and can be expanded or collapsed.
 Sprint and Grand Prix sessions have one dropdown per scoring position:
 
-- Fill positions from first place down. The next position unlocks once the
-  previous one is filled.
+- Fill positions in any order. Every position is editable from the start, and
+  unfilled positions inside a result are left open.
 - A rider already selected in a session is disabled in that session's other
   positions, so the same rider cannot occupy two positions.
-- Selecting "— Clear —" in a position clears that position and every position
-  after it.
+- Selecting "— Clear —" in a position clears only that position. The positions
+  before and after it keep their riders.
 - Each session shows whether it is not simulated, incomplete, or complete.
   Partial results are deliberate: only the filled positions score, and the
   standings panel calls out incomplete sessions.

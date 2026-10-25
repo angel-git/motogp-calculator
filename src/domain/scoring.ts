@@ -1,4 +1,4 @@
-import type { EventType, RiderId, ScoringRules } from './types';
+import type { EventType, ResultSlot, RiderId, ScoringRules } from './types';
 
 /** Thrown when a result or points table cannot be scored. */
 export class ScoringError extends Error {
@@ -62,20 +62,26 @@ export function pointsForPosition(
 /**
  * Score a complete or partial finishing order.
  *
- * Every listed position is returned, including positions outside the scoring
+ * Every filled position is returned, including positions outside the scoring
  * range (with zero points), because countback uses the full classification.
+ * Null entries mark unfilled positions: they award no points, but they still
+ * occupy their position so riders after a gap keep their true finishing place.
  * Duplicate riders are rejected rather than scored twice.
  *
  * @throws {ScoringError} for duplicate riders or an unknown event type.
  */
 export function scoreEvent(
   eventType: EventType,
-  finishingOrder: readonly RiderId[],
+  finishingOrder: readonly ResultSlot[],
   rules: ScoringRules,
 ): ScoredFinish[] {
   const seenRiderIds = new Set<RiderId>();
+  const finishes: ScoredFinish[] = [];
 
-  return finishingOrder.map((riderId, index) => {
+  finishingOrder.forEach((riderId, index) => {
+    if (riderId === null) {
+      return;
+    }
     if (riderId.trim() === '') {
       throw new ScoringError(`Finishing position ${index + 1} has an empty rider ID`);
     }
@@ -87,10 +93,12 @@ export function scoreEvent(
     seenRiderIds.add(riderId);
 
     const position = index + 1;
-    return {
+    finishes.push({
       riderId,
       position,
       points: pointsForPosition(eventType, position, rules),
-    };
+    });
   });
+
+  return finishes;
 }

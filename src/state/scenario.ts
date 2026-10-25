@@ -2,6 +2,7 @@ import { pointsTable } from '../domain/scoring';
 import type {
   Event,
   EventId,
+  ResultSlot,
   Rider,
   RiderId,
   Scenario,
@@ -14,11 +15,10 @@ import { ScenarioError } from '../domain/validation';
 /**
  * Application state for the race editor.
  *
- * The editor keeps a contiguous run of rider IDs per event, from the winner
- * down. Position N is only editable once positions 1..N-1 are filled, which
- * means a draft can always be converted to the domain `Scenario` shape without
- * ambiguous gaps. The store is deliberately free of DOM APIs so the editing
- * rules can be unit tested.
+ * The editor keeps one slot per position per event, from the winner down. Any
+ * position can be filled or cleared independently, so a draft may contain gaps
+ * (represented by null) in the middle of a classification. The store is
+ * deliberately free of DOM APIs so the editing rules can be unit tested.
  */
 
 export type EventStatusKind = 'empty' | 'incomplete' | 'complete';
@@ -40,15 +40,18 @@ export interface EventStatus {
 export interface ScenarioStore {
   /** Convert the current editor state into a domain scenario. */
   getScenario(): Scenario;
-  /** Current finishing order for one event, from the winner onwards. */
-  getEventResults(eventId: EventId): readonly RiderId[];
+  /**
+   * Current finishing order for one event, from the winner onwards. Unfilled
+   * positions inside the result are represented by null.
+   */
+  getEventResults(eventId: EventId): readonly ResultSlot[];
   /**
    * Assign a rider to a 1-based finishing position, or pass an empty string to
-   * clear that position. Clearing a position also clears every position after
-   * it so the result stays contiguous.
+   * clear that position. Positions are independent: filling or clearing one
+   * position never changes the others.
    *
    * @throws {ScenarioError} for an unknown event or rider, an out-of-range
-   * position, a position that is not reachable yet, or a duplicate rider.
+   * position, or a duplicate rider.
    */
   setPosition(eventId: EventId, position: number, riderId: RiderId | ''): void;
   /** Remove every result for one event. */
@@ -73,11 +76,14 @@ export function positionCount(event: Event, scoring: ScoringRules): number {
  */
 export function getEventStatus(
   event: Event,
-  result: readonly RiderId[],
+  result: readonly ResultSlot[],
   scoring: ScoringRules,
 ): EventStatus {
   const totalPositions = positionCount(event, scoring);
-  const filledPositions = Math.min(result.length, totalPositions);
+  const filledPositions = Math.min(
+    result.filter((riderId) => riderId !== null).length,
+    totalPositions,
+  );
 
   if (filledPositions === 0) {
     return {
@@ -143,20 +149,29 @@ export function sortRidersByStanding(
  * same event. `position` is 1-based and may be beyond the current result.
  */
 export function isRiderAvailableForPosition(
-  result: readonly RiderId[],
+  result: readonly ResultSlot[],
   position: number,
   riderId: RiderId,
 ): boolean {
   const index = position - 1;
   return result.every((selected, selectedIndex) => {
-    return selectedIndex === index || selected !== riderId;
+    return selectedIndex === index || selected === null || selected !== riderId;
   });
+}
+
+/** Drop trailing unfilled slots so the stored result ends on a filled place. */
+function trimTrailingEmpty(result: ResultSlot[]): ResultSlot[] {
+  let end = result.length;
+  while (end > 0 && result[end - 1] === null) {
+    end -= 1;
+  }
+  return result.slice(0, end);
 }
 
 export function createScenarioStore(season: Season): ScenarioStore {
   const eventById = new Map(season.remainingEvents.map((event) => [event.id, event]));
   const knownRiderIds = new Set(season.riders.map((rider) => rider.id));
-  const results = new Map<EventId, RiderId[]>();
+  const results = new Map<EventId, ResultSlot[]>();
   const listeners = new Set<() => void>();
 
   function emit(): void {
@@ -165,7 +180,7 @@ export function createScenarioStore(season: Season): ScenarioStore {
     }
   }
 
-  function getEventResults(eventId: EventId): readonly RiderId[] {
+  function getEventResults(eventId: EventId): readonly ResultSlot[] {
     return [...(results.get(eventId) ?? [])];
   }
 
@@ -192,27 +207,19 @@ export function createScenarioStore(season: Season): ScenarioStore {
 
     const current = results.get(eventId) ?? [];
     const index = position - 1;
+    const next = [...current];
 
-    if (index > current.length) {
-      throw new ScenarioError([
-        `Position ${position} in event "${eventId}" cannot be filled before position ${current.length + 1}`,
-      ]);
+    // Grow the result with unfilled slots so any position can be edited
+    // directly, without first filling the positions above it.
+    while (next.length <= index) {
+      next.push(null);
     }
-
-    let next: RiderId[];
 
     if (riderId === '') {
-      // Clearing a position also clears everything after it so the result
-      // remains a contiguous finishing order.
-      next = current.slice(0, index);
-    } else if (index < current.length) {
-      next = [...current];
-      next[index] = riderId;
+      next[index] = null;
     } else {
-      next = [...current, riderId];
-    }
+      next[index] = riderId;
 
-    if (riderId !== '') {
       const duplicate = next.some(
         (selected, selectedIndex) => selectedIndex !== index && selected === riderId,
       );
@@ -223,13 +230,22 @@ export function createScenarioStore(season: Season): ScenarioStore {
       }
     }
 
-    if (next.length === 0) {
+    const trimmed = trimTrailingEmpty(next);
+    const changed =
+      trimmed.length !== current.length ||
+      trimmed.some((slot, slotIndex) => slot !== current[slotIndex]);
+
+    if (!changed) {
+      return;
+    }
+
+    if (trimmed.length === 0) {
       if (!results.has(eventId)) {
         return;
       }
       results.delete(eventId);
     } else {
-      results.set(eventId, next);
+      results.set(eventId, trimmed);
     }
 
     emit();
@@ -250,7 +266,7 @@ export function createScenarioStore(season: Season): ScenarioStore {
   }
 
   function getScenario(): Scenario {
-    const scenarioResults: Record<EventId, readonly RiderId[]> = {};
+    const scenarioResults: Record<EventId, readonly ResultSlot[]> = {};
 
     // Use calendar order rather than Map insertion order so the scenario is
     // stable regardless of the order the user edited events in.

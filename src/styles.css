@@ -368,10 +368,6 @@ select {
   background: rgb(255 255 255 / 2.5%);
 }
 
-.position-row--locked {
-  opacity: 0.55;
-}
-
 .position-row__number {
   color: var(--text-muted);
   font-size: 0.8rem;

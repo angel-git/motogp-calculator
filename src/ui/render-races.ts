@@ -123,9 +123,9 @@ function createSession(
       try {
         store.setPosition(event.id, position, select.value);
       } catch (error) {
-        // The store rejects duplicates and out-of-order edits. The UI disables
-        // those choices, so reaching this path means the view and state
-        // disagree; resync rather than leaving a misleading selection.
+        // The store rejects duplicate riders. The UI disables those choices,
+        // so reaching this path means the view and state disagree; resync
+        // rather than leaving a misleading selection.
         console.error(error);
         sync();
       }
@@ -158,21 +158,14 @@ function createSession(
       const select = selects[index];
       const row = rows[index];
       const value = result[index] ?? '';
-      const isLocked = index > result.length;
 
       if (select.value !== value) {
         select.value = value;
       }
-      select.disabled = isLocked;
 
       const placeholder = select.options[0];
       if (placeholder) {
-        placeholder.textContent =
-          value !== ''
-            ? '— Clear —'
-            : index === result.length
-              ? 'Select rider'
-              : '—';
+        placeholder.textContent = value !== '' ? '— Clear —' : 'Select rider';
       }
 
       // A rider selected in one position is disabled everywhere else in this
@@ -187,7 +180,6 @@ function createSession(
       }
 
       row.classList.toggle('position-row--filled', value !== '');
-      row.classList.toggle('position-row--locked', isLocked);
     }
   }
 

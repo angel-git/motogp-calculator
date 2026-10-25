@@ -36,7 +36,7 @@ racesHeading.id = 'races-heading';
 const racesNote = el(
   'p',
   'panel__note',
-  'Pick riders from first place down. A rider already chosen in a session is disabled in its other positions. Partial results score only the filled positions.',
+  'Fill any position in any order. A rider already chosen in a session is disabled in its other positions. Clearing one position leaves the rest untouched, and partial results score only the filled positions.',
 );
 racesHeader.append(racesHeading, racesNote);
 

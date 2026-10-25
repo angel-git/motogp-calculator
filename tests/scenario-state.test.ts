@@ -72,15 +72,19 @@ describe('scenario store', () => {
     ]);
   });
 
-  it('clearing a position also clears every position after it', () => {
+  it('clearing a position leaves every other position in place', () => {
     const store = newStore();
     store.setPosition(SPRINT.id, 1, 'jorge-martin');
     store.setPosition(SPRINT.id, 2, 'marc-marquez');
     store.setPosition(SPRINT.id, 3, 'pedro-acosta');
 
-    store.setPosition(SPRINT.id, 2, '');
+    store.setPosition(SPRINT.id, 1, '');
 
-    expect(store.getEventResults(SPRINT.id)).toEqual(['jorge-martin']);
+    expect(store.getEventResults(SPRINT.id)).toEqual([
+      null,
+      'marc-marquez',
+      'pedro-acosta',
+    ]);
   });
 
   it('does not let a rider occupy two positions in one event', () => {
@@ -120,12 +124,38 @@ describe('scenario store', () => {
     ).toThrow(ScenarioError);
   });
 
-  it('rejects filling a position before the preceding ones', () => {
+  it('allows filling any position, leaving gaps for the unfilled ones', () => {
     const store = newStore();
 
-    expect(() => store.setPosition(SPRINT.id, 2, 'jorge-martin')).toThrow(
-      ScenarioError,
-    );
+    store.setPosition(SPRINT.id, 3, 'pedro-acosta');
+    expect(store.getEventResults(SPRINT.id)).toEqual([
+      null,
+      null,
+      'pedro-acosta',
+    ]);
+
+    store.setPosition(SPRINT.id, 1, 'jorge-martin');
+    expect(store.getEventResults(SPRINT.id)).toEqual([
+      'jorge-martin',
+      null,
+      'pedro-acosta',
+    ]);
+    expect(store.getScenario().results[SPRINT.id]).toEqual([
+      'jorge-martin',
+      null,
+      'pedro-acosta',
+    ]);
+  });
+
+  it('trims trailing cleared positions from the stored result', () => {
+    const store = newStore();
+    store.setPosition(SPRINT.id, 1, 'jorge-martin');
+    store.setPosition(SPRINT.id, 3, 'pedro-acosta');
+
+    store.setPosition(SPRINT.id, 3, '');
+
+    expect(store.getEventResults(SPRINT.id)).toEqual(['jorge-martin']);
+    expect(store.getScenario().results[SPRINT.id]).toEqual(['jorge-martin']);
   });
 
   it('clears one event or every event', () => {
@@ -174,6 +204,16 @@ describe('event status', () => {
 
     expect(
       getEventStatus(SPRINT, ['jorge-martin'], season2026.scoring),
+    ).toMatchObject({
+      kind: 'incomplete',
+      filledPositions: 1,
+      totalPositions: SPRINT_POSITIONS,
+      simulated: true,
+    });
+
+    // A gap still counts only the positions that have a rider.
+    expect(
+      getEventStatus(SPRINT, [null, 'jorge-martin'], season2026.scoring),
     ).toMatchObject({
       kind: 'incomplete',
       filledPositions: 1,

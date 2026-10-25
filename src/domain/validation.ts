@@ -524,8 +524,9 @@ export function parseSeason(value: unknown): Season {
 /**
  * Check a scenario against the events and riders it is allowed to reference.
  *
- * Partial results are allowed: only the positions present in the array are
- * treated as filled. An event absent from the scenario has not been simulated.
+ * Partial results are allowed: null entries mark unfilled positions, so only
+ * the non-null entries are validated and scored. An event absent from the
+ * scenario has not been simulated.
  */
 export function validateScenarioResults(
   events: readonly Event[],
@@ -549,6 +550,15 @@ export function validateScenarioResults(
 
     const seenRiderIds = new Set<string>();
     finishingOrder.forEach((riderId, index) => {
+      if (riderId === null) {
+        return;
+      }
+      if (typeof riderId !== 'string') {
+        issues.push(
+          `Position ${index + 1} in event "${eventId}" must be a rider ID or null`,
+        );
+        return;
+      }
       if (!knownRiderIds.has(riderId)) {
         issues.push(
           `Unknown rider ID "${riderId}" at position ${index + 1} in event "${eventId}"`,
@@ -566,7 +576,8 @@ export function validateScenarioResults(
 
 /**
  * Check a scenario for unknown IDs and repeated riders. Partial results are
- * allowed: only the positions present in the array are treated as filled.
+ * allowed: null entries mark unfilled positions and the remaining entries are
+ * validated as normal.
  */
 export function validateScenario(season: Season, scenario: Scenario): string[] {
   return validateScenarioResults(

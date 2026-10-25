@@ -54,8 +54,9 @@ function compareAccumulators(a: Accumulator, b: Accumulator): number {
  * - Starting points are counted exactly once.
  * - Only events present in `scenario.results` score; absent events award
  *   nothing and are treated as "not simulated yet".
- * - Partial results are allowed. Only the listed positions score, so an
- *   unfilled position awards no points to anybody.
+ * - Partial results are allowed. Only the filled positions score, so an
+ *   unfilled position awards no points to anybody while positions after a gap
+ *   keep their true finishing place.
  * - Sprint and Grand Prix results use their own points tables.
  * - Countback is updated with every listed finish and used to break ties.
  *
@@ -108,8 +109,12 @@ export function calculateChampionship(
     }
 
     const finishingOrder = scenario.results[event.id];
-    if (!Array.isArray(finishingOrder) || finishingOrder.length === 0) {
-      // An explicitly empty result is treated as not simulated yet.
+    if (
+      !Array.isArray(finishingOrder) ||
+      !finishingOrder.some((riderId) => riderId !== null)
+    ) {
+      // An empty result, or one with only unfilled positions, is treated as
+      // not simulated yet.
       continue;
     }
 
