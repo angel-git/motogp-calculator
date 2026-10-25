@@ -98,5 +98,11 @@ the app starts and in the tests. The validation lives in
 
 ## Deployment
 
-The app is a client-side-only static site intended for GitHub Pages. Automated
-deployment via GitHub Actions is part of a later milestone.
+The app is a client-side-only static site deployed to GitHub Pages by
+`.github/workflows/deploy.yml`. Every push to `master` runs the tests, builds
+`dist`, and publishes it as a Pages artifact (the workflow can also be started
+manually from the Actions tab).
+
+One-time repository setup: in **Settings → Pages**, set **Source** to
+**GitHub Actions**. Because `vite.config.ts` uses a relative `base`, the build
+works at both `https://<user>.github.io/<repo>/` and a custom domain root.
