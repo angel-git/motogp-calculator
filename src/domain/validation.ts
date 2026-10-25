@@ -3,6 +3,7 @@ import type {
   Event,
   EventType,
   Rider,
+  RiderId,
   Scenario,
   Season,
   SeasonMetadata,
@@ -17,6 +18,17 @@ export class SeasonDataError extends Error {
   constructor(issues: readonly string[]) {
     super(`Invalid season data:\n- ${issues.join('\n- ')}`);
     this.name = 'SeasonDataError';
+    this.issues = issues;
+  }
+}
+
+/** Thrown when a scenario references invalid events, riders, or duplicates. */
+export class ScenarioError extends Error {
+  readonly issues: readonly string[];
+
+  constructor(issues: readonly string[]) {
+    super(`Invalid scenario:\n- ${issues.join('\n- ')}`);
+    this.name = 'ScenarioError';
     this.issues = issues;
   }
 }
@@ -484,13 +496,19 @@ export function parseSeason(value: unknown): Season {
 }
 
 /**
- * Check a scenario for unknown IDs and repeated riders. Partial results are
- * allowed: only the positions present in the array are treated as filled.
+ * Check a scenario against the events and riders it is allowed to reference.
+ *
+ * Partial results are allowed: only the positions present in the array are
+ * treated as filled. An event absent from the scenario has not been simulated.
  */
-export function validateScenario(season: Season, scenario: Scenario): string[] {
+export function validateScenarioResults(
+  events: readonly Event[],
+  riderIds: readonly RiderId[],
+  scenario: Scenario,
+): string[] {
   const issues: string[] = [];
-  const eventIds = new Set(season.remainingEvents.map((event) => event.id));
-  const riderIds = new Set(season.riders.map((rider) => rider.id));
+  const eventIds = new Set(events.map((event) => event.id));
+  const knownRiderIds = new Set(riderIds);
 
   for (const [eventId, finishingOrder] of Object.entries(scenario.results)) {
     if (!eventIds.has(eventId)) {
@@ -505,7 +523,7 @@ export function validateScenario(season: Season, scenario: Scenario): string[] {
 
     const seenRiderIds = new Set<string>();
     finishingOrder.forEach((riderId, index) => {
-      if (!riderIds.has(riderId)) {
+      if (!knownRiderIds.has(riderId)) {
         issues.push(
           `Unknown rider ID "${riderId}" at position ${index + 1} in event "${eventId}"`,
         );
@@ -518,4 +536,16 @@ export function validateScenario(season: Season, scenario: Scenario): string[] {
   }
 
   return issues;
+}
+
+/**
+ * Check a scenario for unknown IDs and repeated riders. Partial results are
+ * allowed: only the positions present in the array are treated as filled.
+ */
+export function validateScenario(season: Season, scenario: Scenario): string[] {
+  return validateScenarioResults(
+    season.remainingEvents,
+    season.riders.map((rider) => rider.id),
+    scenario,
+  );
 }

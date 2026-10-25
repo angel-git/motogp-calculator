@@ -95,3 +95,27 @@ export interface Season {
 export interface Scenario {
   results: Readonly<Record<EventId, readonly RiderId[]>>;
 }
+
+/** A projected standing after applying a scenario to the starting standings. */
+export interface ChampionshipStanding extends Standing {
+  /** Official position at the standings cutoff. */
+  startingPosition: number;
+  /** Points held at the cutoff. */
+  startingPoints: number;
+  /** Points earned in simulated events only. */
+  simulatedPoints: number;
+  /** Places gained (positive) or lost (negative) compared with the cutoff. */
+  positionChange: number;
+}
+
+/** Standings plus the summary information the UI needs. */
+export interface ChampionshipProjection {
+  standings: readonly ChampionshipStanding[];
+  champion: ChampionshipStanding;
+  /** Null only when the championship contains a single rider. */
+  runnerUp: ChampionshipStanding | null;
+  /** Champion points minus runner-up points; zero for a single rider. */
+  pointsGap: number;
+  /** Simulated event IDs in calendar order. Empty results are ignored. */
+  simulatedEvents: readonly EventId[];
+}

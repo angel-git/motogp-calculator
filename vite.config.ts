@@ -8,8 +8,5 @@ export default defineConfig({
   test: {
     environment: 'node',
     include: ['tests/**/*.test.ts'],
-    // Domain tests arrive with the scoring engine (Milestone 3); until then the
-    // test suite is legitimately empty.
-    passWithNoTests: true,
   },
 });

@@ -23,9 +23,28 @@ npm run test        # single run
 npm run test:watch  # watch mode
 ```
 
-The suite currently covers the season data and validation layer in
-`tests/season-data.test.ts`. Scoring and championship calculation tests arrive
-with the scoring engine.
+The suite covers the season data and validation layer in
+`tests/season-data.test.ts`, plus the scoring engine in `tests/scoring.test.ts`,
+the countback rules in `tests/tiebreak.test.ts`, and championship aggregation in
+`tests/championship.test.ts`.
+
+### Scoring engine assumptions
+
+The pure calculation functions live in `src/domain/` and are independent of the
+DOM:
+
+- `scoring.ts` maps finishing positions to the configured Sprint or Grand Prix
+  points table. Positions outside the scoring range score zero.
+- `championship.ts` adds simulated points to the starting standings and returns
+  the projected order, champion, runner-up, and points gap.
+- `tiebreak.ts` implements countback: Grand Prix placings are compared first
+  (wins, then seconds, and so on), followed by Sprint placings. The checked-in
+  classification ranks Marini ahead of Binder on 108 points because of a Grand
+  Prix fifth place, which confirms that ordering.
+- Unsimulated events award nothing. Partial results score only the listed
+  positions, so an unfilled position awards no points. If the data still cannot
+  separate two riders, the cutoff order and then rider ID provide a
+  deterministic fallback; that deeper tie-break is not modelled yet.
 
 ## Production build
 

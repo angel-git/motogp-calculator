@@ -26,7 +26,7 @@ if (app) {
           ${rounds} rounds, with ${activeRiders} available riders.
         </p>
         <p>
-          The scoring engine and race editor are coming in the next milestones.
+          The race editor and live standings are coming in the next milestones.
         </p>
       </section>
     </main>
