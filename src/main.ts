@@ -3,6 +3,7 @@ import { season2026 } from './data/season';
 import { createScenarioStore } from './state/scenario';
 import { el } from './ui/dom';
 import { createRaceEditor } from './ui/render-races';
+import { createMiniStandings } from './ui/render-mini-standings';
 import { createStandingsPanel } from './ui/render-standings';
 
 const app = document.querySelector<HTMLDivElement>('#app');
@@ -42,7 +43,8 @@ racesHeader.append(racesHeading, racesNote);
 racesPanel.append(racesHeader, createRaceEditor({ season: season2026, store }));
 
 const standingsPanel = createStandingsPanel({ season: season2026, store });
+const miniStandings = createMiniStandings({ season: season2026, store });
 
 layout.append(racesPanel, standingsPanel);
-page.append(masthead, layout);
+page.append(masthead, miniStandings, layout);
 app.replaceChildren(page);

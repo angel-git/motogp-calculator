@@ -526,7 +526,7 @@ select {
   white-space: nowrap;
 }
 
-.standings-table__number {
+.rider-number {
   display: inline-flex;
   flex: none;
   align-items: center;
@@ -570,6 +570,121 @@ select {
 .standings-table__points--total {
   color: var(--text);
   font-size: 0.9rem;
+}
+
+/* Compact mobile standings summary --------------------------------------- */
+
+.mini-standings {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  margin-top: 1rem;
+  padding: 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 0.85rem;
+  background: rgb(16 20 25 / 94%);
+  box-shadow: 0 10px 28px rgb(0 0 0 / 40%);
+  backdrop-filter: blur(12px);
+}
+
+.mini-standings__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mini-standings__item {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.1rem 0.3rem;
+  min-width: 0;
+  padding: 0.3rem 0.4rem;
+  border: 1px solid rgb(255 255 255 / 6%);
+  border-radius: 0.55rem;
+  background: rgb(255 255 255 / 3%);
+}
+
+.mini-standings__item--leader {
+  border-color: rgb(225 6 0 / 40%);
+  background: rgb(225 6 0 / 10%);
+}
+
+.mini-standings__position {
+  grid-column: 1;
+  color: var(--text-dim);
+  font-size: 0.6rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.mini-standings__item .rider-number {
+  grid-column: 2;
+  min-width: 1.5rem;
+  padding: 0.08rem 0.3rem;
+  font-size: 0.65rem;
+}
+
+.mini-standings__name {
+  grid-column: 3;
+  overflow: hidden;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mini-standings__score {
+  display: flex;
+  grid-column: 1 / -1;
+  gap: 0.3rem;
+  align-items: baseline;
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.mini-standings__score strong {
+  font-size: 0.85rem;
+}
+
+.mini-standings__delta {
+  color: var(--complete);
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+@media (min-width: 70rem) {
+  .mini-standings {
+    display: none;
+  }
+}
+
+@media (max-width: 26rem) {
+  .mini-standings__list {
+    gap: 0.3rem;
+  }
+
+  .mini-standings__item {
+    gap: 0.1rem 0.2rem;
+    padding: 0.25rem 0.3rem;
+  }
+
+  .mini-standings__position {
+    font-size: 0.55rem;
+  }
+
+  .mini-standings__item .rider-number {
+    min-width: 1.35rem;
+    padding: 0.05rem 0.2rem;
+    font-size: 0.62rem;
+  }
+
+  .mini-standings__name {
+    font-size: 0.65rem;
+  }
 }
 
 .standings-panel__warning {
