@@ -172,6 +172,67 @@ describe('scenario store', () => {
     expect(store.getScenario()).toEqual({ results: {} });
   });
 
+  it('loads a whole scenario in one step and notifies once', () => {
+    const store = newStore();
+    const listener = vi.fn();
+    store.subscribe(listener);
+
+    store.setScenario({
+      results: {
+        [SPRINT.id]: ['jorge-martin', null, 'pedro-acosta', null],
+        [GRAND_PRIX.id]: ['marc-marquez'],
+      },
+    });
+
+    expect(listener).toHaveBeenCalledTimes(1);
+    expect(store.getEventResults(SPRINT.id)).toEqual([
+      'jorge-martin',
+      null,
+      'pedro-acosta',
+    ]);
+    expect(store.getEventResults(GRAND_PRIX.id)).toEqual(['marc-marquez']);
+    expect(store.getScenario().results).toEqual({
+      [SPRINT.id]: ['jorge-martin', null, 'pedro-acosta'],
+      [GRAND_PRIX.id]: ['marc-marquez'],
+    });
+
+    store.setScenario({
+      results: {
+        [SPRINT.id]: ['jorge-martin', null, 'pedro-acosta'],
+        [GRAND_PRIX.id]: ['marc-marquez'],
+      },
+    });
+    expect(listener).toHaveBeenCalledTimes(1);
+  });
+
+  it('rejects an invalid imported scenario without changing the current one', () => {
+    const store = newStore();
+    store.setPosition(SPRINT.id, 1, 'jorge-martin');
+
+    expect(() =>
+      store.setScenario({
+        results: { [SPRINT.id]: ['jorge-martin', 'jorge-martin'] },
+      }),
+    ).toThrow(ScenarioError);
+    expect(() =>
+      store.setScenario({
+        results: { 'not-an-event': ['jorge-martin'] },
+      }),
+    ).toThrow(ScenarioError);
+    expect(() =>
+      store.setScenario({
+        results: {
+          [SPRINT.id]: Array.from(
+            { length: SPRINT_POSITIONS + 1 },
+            (_, index) => `rider-${index + 1}`,
+          ),
+        },
+      }),
+    ).toThrow(ScenarioError);
+
+    expect(store.getEventResults(SPRINT.id)).toEqual(['jorge-martin']);
+  });
+
   it('notifies subscribers on real changes only', () => {
     const store = newStore();
     const listener = vi.fn();

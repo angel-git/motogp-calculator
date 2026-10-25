@@ -28,8 +28,9 @@ npm run test:watch  # watch mode
 The suite covers the season data and validation layer in
 `tests/season-data.test.ts`, the scoring engine in `tests/scoring.test.ts`, the
 countback rules in `tests/tiebreak.test.ts`, championship aggregation in
-`tests/championship.test.ts`, and the race-editor state rules in
-`tests/scenario-state.test.ts`.
+`tests/championship.test.ts`, the race-editor state rules in
+`tests/scenario-state.test.ts`, and share-link encoding in
+`tests/share-link.test.ts`.
 
 ## Using the race editor
 
@@ -73,6 +74,33 @@ DOM:
   positions, so an unfilled position awards no points. If the data still cannot
   separate two riders, the cutoff order and then rider ID provide a
   deterministic fallback; that deeper tie-break is not modelled yet.
+
+## Sharing predictions
+
+The page URL always reflects the current picks. Every dropdown change rewrites
+the address bar, and opening a link pre-fills the editor with those predictions.
+Use the browser's own share action or copy the address bar to send the link.
+The URL is updated with `history.replaceState`, so editing does not add a new
+browser-history entry for every selection.
+
+Each simulated session becomes one query parameter named after its event ID,
+with the rider IDs in finishing order:
+
+```
+?p.2026-19-malaysia-sprint=marc-marquez,jorge-martin&p.2026-19-malaysia-grand-prix=marc-marquez
+```
+
+An underscore marks an unfilled position inside a partial result. The link also
+records the format version (`v`), season (`y`), and standings cutoff (`c`).
+Unrelated query parameters are preserved.
+
+Shared predictions are applied against the data currently deployed. A session
+that has since been completed is no longer in `remainingEvents`, so its
+predictions are ignored and the official result is used instead. Individual
+picks for riders who are no longer in the remaining field are also dropped. The
+app shows a notice explaining what was applied and what was skipped, including
+when the link was made against an earlier standings cutoff. The URL is then
+rewritten to match what is actually shown.
 
 ## Production build
 

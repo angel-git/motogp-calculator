@@ -10,7 +10,7 @@ import type {
   ScoringRules,
   Standing,
 } from '../domain/types';
-import { ScenarioError } from '../domain/validation';
+import { ScenarioError, validateScenario } from '../domain/validation';
 
 /**
  * Application state for the race editor.
@@ -58,6 +58,15 @@ export interface ScenarioStore {
   clearEvent(eventId: EventId): void;
   /** Remove every result for every event. */
   clearAll(): void;
+  /**
+   * Replace every result with a scenario in one step. Used when loading a
+   * shared link; validation is all-or-nothing so a malformed scenario cannot
+   * leave the editor half-applied.
+   *
+   * @throws {ScenarioError} for unknown events or riders, duplicates, or
+   * positions outside an event's scoring range.
+   */
+  setScenario(scenario: Scenario): void;
   /** Listen for state changes. Returns an unsubscribe function. */
   subscribe(listener: () => void): () => void;
 }
@@ -265,6 +274,57 @@ export function createScenarioStore(season: Season): ScenarioStore {
     emit();
   }
 
+  function setScenario(scenario: Scenario): void {
+    const issues = validateScenario(season, scenario);
+
+    for (const [eventId, finishingOrder] of Object.entries(scenario.results)) {
+      const event = eventById.get(eventId);
+      if (!event || !Array.isArray(finishingOrder)) {
+        continue;
+      }
+
+      const totalPositions = positionCount(event, season.scoring);
+      if (finishingOrder.length > totalPositions) {
+        issues.push(
+          `Event "${eventId}" allows at most ${totalPositions} positions`,
+        );
+      }
+    }
+
+    if (issues.length > 0) {
+      throw new ScenarioError(issues);
+    }
+
+    const next = new Map<EventId, ResultSlot[]>();
+    for (const [eventId, finishingOrder] of Object.entries(scenario.results)) {
+      const trimmed = trimTrailingEmpty([...finishingOrder]);
+      if (trimmed.length > 0) {
+        next.set(eventId, trimmed);
+      }
+    }
+
+    const unchanged =
+      next.size === results.size &&
+      [...next].every(([eventId, finishingOrder]) => {
+        const existing = results.get(eventId);
+        return (
+          existing !== undefined &&
+          existing.length === finishingOrder.length &&
+          existing.every((slot, index) => slot === finishingOrder[index])
+        );
+      });
+
+    if (unchanged) {
+      return;
+    }
+
+    results.clear();
+    for (const [eventId, finishingOrder] of next) {
+      results.set(eventId, finishingOrder);
+    }
+    emit();
+  }
+
   function getScenario(): Scenario {
     const scenarioResults: Record<EventId, readonly ResultSlot[]> = {};
 
@@ -293,6 +353,7 @@ export function createScenarioStore(season: Season): ScenarioStore {
     setPosition,
     clearEvent,
     clearAll,
+    setScenario,
     subscribe,
   };
 }
