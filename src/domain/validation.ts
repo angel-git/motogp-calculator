@@ -36,6 +36,7 @@ export class ScenarioError extends Error {
 const RIDER_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const EVENT_ID_PATTERN = /^\d{4}-\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+const HEX_COLOR_PATTERN = /^#[0-9a-f]{6}$/;
 
 /**
  * Deepest finishing position present in the cutoff classification: Grands
@@ -85,6 +86,27 @@ function readBoolean(
     return false;
   }
   return value;
+}
+
+/** Read a lowercase `#rrggbb` colour, normalising the casing of the input. */
+function readColor(
+  record: UnknownRecord,
+  key: string,
+  path: string,
+  issues: string[],
+): string {
+  const value = record[key];
+  if (typeof value !== 'string') {
+    issues.push(`${path}.${key} must be a hex colour such as "#ad0000"`);
+    return '';
+  }
+
+  const color = value.trim().toLowerCase();
+  if (!HEX_COLOR_PATTERN.test(color)) {
+    issues.push(`${path}.${key} must be a hex colour such as "#ad0000"`);
+    return '';
+  }
+  return color;
 }
 
 function readInteger(
@@ -225,6 +247,8 @@ function parseRiders(value: unknown, issues: string[]): Rider[] {
         name: '',
         shortName: '',
         number: 0,
+        color: '',
+        textColor: '',
         team: '',
         constructor: '',
         country: '',
@@ -248,6 +272,8 @@ function parseRiders(value: unknown, issues: string[]): Rider[] {
       name: readString(entry, 'name', path, issues),
       shortName: readString(entry, 'shortName', path, issues),
       number: readInteger(entry, 'number', path, issues, 1, 999),
+      color: readColor(entry, 'color', path, issues),
+      textColor: readColor(entry, 'textColor', path, issues),
       team: readString(entry, 'team', path, issues),
       constructor: readString(entry, 'constructor', path, issues),
       country: readString(entry, 'country', path, issues),

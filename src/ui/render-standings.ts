@@ -112,11 +112,13 @@ export function createStandingsPanel({
 
       const riderCell = el('td', 'standings-table__rider');
       const riderName = el('span', 'standings-table__rider-name');
-      const number = el(
-        'span',
-        'standings-table__number',
-        rider ? `#${rider.number}` : '',
-      );
+      const number = el('span', 'standings-table__number');
+      if (rider) {
+        number.textContent = String(rider.number);
+        number.style.backgroundColor = rider.color;
+        number.style.color = rider.textColor;
+        number.setAttribute('aria-label', `Number ${rider.number}`);
+      }
       const name = el('span', '', rider?.shortName ?? standing.riderId);
       riderName.append(number, name);
       const team = el('span', 'standings-table__team', rider?.team ?? '');

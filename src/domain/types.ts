@@ -16,6 +16,13 @@ export interface Rider {
   /** Compact label for tight UI, for example "M. Márquez". */
   shortName: string;
   number: number;
+  /**
+   * Rider colour used for the number badge, as a `#rrggbb` hex string. Taken
+   * from the MotoGP live timing feed (`color`).
+   */
+  color: string;
+  /** Text colour that stays legible on `color`, as a `#rrggbb` hex string. */
+  textColor: string;
   team: string;
   constructor: string;
   country: string;

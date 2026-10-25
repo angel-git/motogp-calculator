@@ -62,6 +62,24 @@ describe('2026 season data', () => {
     expect(standings.get('brad-binder')).toMatchObject({ position: 13, points: 108 });
   });
 
+  it('includes the rider colours used by the number badges', () => {
+    const byId = new Map(season2026.riders.map((rider) => [rider.id, rider]));
+
+    expect(byId.get('marc-marquez')).toMatchObject({
+      color: '#ad0000',
+      textColor: '#ffffff',
+    });
+    expect(byId.get('fabio-quartararo')).toMatchObject({
+      color: '#0a2d82',
+      textColor: '#ffffff',
+    });
+
+    for (const rider of season2026.riders) {
+      expect(rider.color).toMatch(/^#[0-9a-f]{6}$/);
+      expect(rider.textColor).toMatch(/^#[0-9a-f]{6}$/);
+    }
+  });
+
   it('marks the expected line-up for the remaining rounds', () => {
     const byId = new Map(season2026.riders.map((rider) => [rider.id, rider]));
 
@@ -104,6 +122,13 @@ describe('season data validation', () => {
     data.riders[1].id = data.riders[0].id;
 
     expect(issuesFor(data).join('\n')).toContain('duplicates rider id');
+  });
+
+  it('rejects a rider colour that is not a hex colour', () => {
+    const data = cloneSeasonData();
+    data.riders[0].color = 'ad0000';
+
+    expect(issuesFor(data).join('\n')).toContain('must be a hex colour');
   });
 
   it('rejects a standing that references an unknown rider', () => {

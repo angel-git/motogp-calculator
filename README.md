@@ -82,16 +82,26 @@ the app starts and in the tests. The validation lives in
 `src/domain/validation.ts`; the validated object is exported from
 `src/data/season.ts`.
 
+Each rider also carries `color` and `textColor` (both `#rrggbb`) for the number
+badge in the standings. These are snapshotted from the MotoGP live timing feed
+(`/motogp/v1/timing-gateway/livetiming-lite`). The feed is not requested at
+runtime: it only allows browser requests from `motogp.com` origins, so a static
+GitHub Pages build cannot read it. Riders absent from the current session use
+the colours of their team-mates from the same feed, or the official team
+colours when the team is not represented.
+
 ### Updating the season data
 
 1. Replace or refresh the values in `src/data/season-2026.json`.
 2. Update `meta.standingsCutoff`, `meta.standingsCutoffRound`, and
    `meta.standingsCutoffLabel`, and refresh the source URLs.
-3. Keep rider and event IDs stable; URLs and saved scenarios will rely on
+3. Refresh each rider's `color` and `textColor` from the live timing feed when
+   liveries change.
+4. Keep rider and event IDs stable; URLs and saved scenarios will rely on
    them. Add new riders/events rather than renaming existing IDs.
-4. Mark riders who will not take part in the remaining rounds with
+5. Mark riders who will not take part in the remaining rounds with
    `"availableForRemainingEvents": false`.
-5. Run `npm run test` and `npm run build`. Validation rejects duplicate IDs,
+6. Run `npm run test` and `npm run build`. Validation rejects duplicate IDs,
    unknown rider references, malformed points tables, events before the
    cutoff, and standings that are not in official order.
 
