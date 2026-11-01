@@ -14,6 +14,7 @@
   --accent-bright: #ff2d24;
   --complete: #59dda4;
   --incomplete: #f5b74c;
+  --champion: #f2c14e;
 
   font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.5;
@@ -559,6 +560,18 @@ select {
   color: var(--text);
 }
 
+.standings-table__row--champion {
+  background: rgb(242 193 78 / 10%);
+}
+
+.standings-table__row--champion td:first-child {
+  box-shadow: inset 3px 0 0 var(--champion);
+}
+
+.standings-table__row--champion .standings-table__position {
+  color: var(--champion);
+}
+
 .standings-table__rider {
   min-width: 10rem;
 }
@@ -668,6 +681,15 @@ select {
 .mini-standings__item--leader {
   border-color: rgb(225 6 0 / 40%);
   background: rgb(225 6 0 / 10%);
+}
+
+.mini-standings__item--champion {
+  border-color: rgb(242 193 78 / 55%);
+  background: rgb(242 193 78 / 12%);
+}
+
+.mini-standings__item--champion .mini-standings__position {
+  color: var(--champion);
 }
 
 .mini-standings__position {

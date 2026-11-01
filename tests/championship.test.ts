@@ -216,6 +216,7 @@ describe('calculateChampionship', () => {
     expect(projection.champion.riderId).toBe('marc-marquez');
     expect(projection.runnerUp?.riderId).toBe('jorge-martin');
     expect(projection.pointsGap).toBe(44);
+    expect(projection.championClinched).toBe(false);
   });
 
   it('projects a manually verified 2026 scenario', () => {
@@ -260,6 +261,76 @@ describe('calculateChampionship', () => {
     ]);
   });
 
+  it('does not clinch while a rival can still overtake the leader', () => {
+    const projection = projectionFor(
+      [standing(1, 'a', 100), standing(2, 'b', 90)],
+      [event('gp-1', 'grandPrix')],
+      {},
+    );
+
+    expect(projection.championClinched).toBe(false);
+  });
+
+  it('clinches when no rival can reach the leader', () => {
+    const projection = projectionFor(
+      [standing(1, 'a', 100), standing(2, 'b', 74)],
+      [event('gp-1', 'grandPrix')],
+      {},
+    );
+
+    // b can only reach 99 points with a Grand Prix win.
+    expect(projection.championClinched).toBe(true);
+  });
+
+  it('does not clinch when a rival could tie the leader on points', () => {
+    const projection = projectionFor(
+      [standing(1, 'a', 100), standing(2, 'b', 75)],
+      [event('gp-1', 'grandPrix')],
+      {},
+    );
+
+    // A tie could be decided against the leader on countback.
+    // TODO this should take into account the countback
+    expect(projection.championClinched).toBe(false);
+  });
+
+  it('counts only unsimulated events as remaining points', () => {
+    const projection = projectionFor(
+      [standing(1, 'a', 100), standing(2, 'b', 90)],
+      [event('gp-1', 'grandPrix'), event('sprint-1', 'sprint')],
+      { 'gp-1': ['a'] },
+    );
+
+    // a leads 125-90 and only the Sprint's 12 points are still available.
+    expect(projection.championClinched).toBe(true);
+  });
+
+  it('clinches after the leader wins the next Sprint and Grand Prix', () => {
+    const clinched = calculateChampionship(
+      season2026.startingStandings,
+      season2026.remainingEvents,
+      {
+        results: {
+          '2026-20-qatar-sprint': ['marc-marquez'],
+          '2026-20-qatar-grand-prix': ['marc-marquez'],
+        },
+      },
+      season2026.scoring,
+    );
+
+    expect(clinched.champion.riderId).toBe('marc-marquez');
+    expect(clinched.champion.points).toBe(436);
+    expect(clinched.championClinched).toBe(true);
+
+    const before = calculateChampionship(
+      season2026.startingStandings,
+      season2026.remainingEvents,
+      { results: {} },
+      season2026.scoring,
+    );
+    expect(before.championClinched).toBe(false);
+  });
+
   it('supports a single-rider championship', () => {
     const projection = projectionFor(
       [standing(1, 'a', 10)],
@@ -270,6 +341,7 @@ describe('calculateChampionship', () => {
     expect(projection.champion.points).toBe(35);
     expect(projection.runnerUp).toBeNull();
     expect(projection.pointsGap).toBe(0);
+    expect(projection.championClinched).toBe(true);
   });
 
   it('rejects an empty championship', () => {

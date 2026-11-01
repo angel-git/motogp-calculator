@@ -1,4 +1,4 @@
-import { scoreEvent } from './scoring';
+import { pointsTable, scoreEvent } from './scoring';
 import { addFinishToCountback, compareByPointsAndCountback } from './tiebreak';
 import type {
   ChampionshipProjection,
@@ -159,11 +159,36 @@ export function calculateChampionship(
   const champion = standings[0];
   const runnerUp = standings[1] ?? null;
 
+  // Every unsimulated session can still be won by any rival, so a rival's
+  // maximum possible total is their current points plus the winner's points
+  // from every remaining session. The leader is only mathematically safe when
+  // even that maximum stays strictly below the leader's current total (a tie
+  // could be decided against the leader on countback).
+  const simulatedEventIds = new Set(simulatedEvents);
+  const maxRemainingPoints = events.reduce((total, event) => {
+    if (simulatedEventIds.has(event.id)) {
+      return total;
+    }
+    return total + (pointsTable(event.type, scoringRules)[0] ?? 0);
+  }, 0);
+  const rivalMaximum = standings
+    .slice(1)
+    .reduce(
+      (maximum, standing) =>
+        Math.max(maximum, standing.points + maxRemainingPoints),
+      Number.NEGATIVE_INFINITY,
+    );
+
+  // TODO
+  // in case of draw, we need to take into account the countback from first against rival
+  const championClinched = champion.points > rivalMaximum;
+
   return {
     standings,
     champion,
     runnerUp,
     pointsGap: runnerUp ? champion.points - runnerUp.points : 0,
+    championClinched,
     simulatedEvents,
   };
 }

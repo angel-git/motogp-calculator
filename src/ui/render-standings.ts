@@ -108,6 +108,10 @@ export function createStandingsPanel({
       const row = el('tr', 'standings-table__row');
       if (standing.position === 1) {
         row.classList.add('standings-table__row--leader');
+        if (projection.championClinched) {
+          row.classList.add('standings-table__row--champion');
+          row.title = 'Mathematical champion';
+        }
       }
 
       const position = el(

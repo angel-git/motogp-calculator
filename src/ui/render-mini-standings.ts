@@ -43,6 +43,10 @@ export function createMiniStandings({
       const item = el('li', 'mini-standings__item');
       if (standing.position === 1) {
         item.classList.add('mini-standings__item--leader');
+        if (projection.championClinched) {
+          item.classList.add('mini-standings__item--champion');
+          item.title = 'Mathematical champion';
+        }
       }
 
       const position = el(
