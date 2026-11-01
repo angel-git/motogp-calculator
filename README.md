@@ -51,7 +51,8 @@ Sprint and Grand Prix sessions have one dropdown per scoring position:
   Partial results are deliberate: only the filled positions score, and the
   standings panel calls out incomplete sessions.
 - The projected standings are recalculated from the starting standings plus the
-  current scenario after every change. They are never stored separately.
+  current scenario after every change. They are never stored separately. A
+  trailing gap column shows how many points each rider is behind the leader.
 - On narrow screens the full standings table sits below the editor. A compact
   top-three summary sticks to the top of the viewport, showing each rider's
   number, name, total, and simulated points, so the championship impact stays

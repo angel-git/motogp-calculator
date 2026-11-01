@@ -47,9 +47,13 @@ export function createStandingsPanel({
     ['Current', 'standings-table__points standings-table__points--current'],
     ['Simulated', 'standings-table__points'],
     ['Total', 'standings-table__points'],
+    ['Gap', 'standings-table__points standings-table__points--gap'],
   ] as const) {
     const th = el('th', className, label);
     th.scope = 'col';
+    if (label === 'Gap') {
+      th.title = 'Points behind the leader';
+    }
     headRow.append(th);
   }
   thead.append(headRow);
@@ -97,6 +101,7 @@ export function createStandingsPanel({
     }
 
     const fragment = document.createDocumentFragment();
+    const leaderPoints = projection.standings[0]?.points ?? 0;
 
     for (const standing of projection.standings) {
       const rider = riderById.get(standing.riderId);
@@ -135,7 +140,14 @@ export function createStandingsPanel({
       const total = el('td', 'standings-table__points standings-table__points--total');
       total.append(el('strong', '', String(standing.points)));
 
-      row.append(position, riderCell, current, simulated, total);
+      const gapToLeader = leaderPoints - standing.points;
+      const gap = el(
+        'td',
+        'standings-table__points standings-table__points--gap',
+        gapToLeader === 0 ? '—' : `-${gapToLeader}`,
+      );
+
+      row.append(position, riderCell, current, simulated, total, gap);
       fragment.append(row);
     }
 

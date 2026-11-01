@@ -509,13 +509,13 @@ select {
   position: sticky;
   top: 0;
   z-index: 1;
-  padding: 0.5rem 0.65rem;
+  padding: 0.5rem 0.4rem;
   border-bottom: 1px solid var(--border);
   background: var(--bg-panel);
   color: var(--text-dim);
   font-size: 0.62rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-align: left;
   text-transform: uppercase;
 }
@@ -531,7 +531,7 @@ select {
 }
 
 .standings-table td {
-  padding: 0.45rem 0.65rem;
+  padding: 0.45rem 0.4rem;
   border-bottom: 1px solid rgb(38 45 53 / 65%);
   vertical-align: middle;
 }
@@ -621,6 +621,12 @@ select {
 .standings-table__points--total {
   color: var(--text);
   font-size: 0.9rem;
+}
+
+.standings-table__points--gap {
+  min-width: 2.4rem;
+  color: var(--text-dim);
+  font-size: 0.78rem;
 }
 
 /* Compact mobile standings summary --------------------------------------- */
@@ -811,10 +817,14 @@ select {
   }
 }
 
-/* On very narrow phones the five-column table cannot fit; drop the starting
-   points column and keep the simulated delta and total. */
+/* On very narrow phones the six-column table cannot fit; drop the starting
+   points column and keep the simulated delta, total, and gap to the leader. */
 @media (max-width: 22rem) {
   .standings-table__points--current {
     display: none;
+  }
+
+  .standings-table__points--gap {
+    min-width: 0;
   }
 }
