@@ -36,6 +36,7 @@ export function createMiniStandings({
     );
 
     const fragment = document.createDocumentFragment();
+    const leaderPoints = projection.standings[0]?.points ?? 0;
 
     for (const standing of projection.standings.slice(0, 3)) {
       const rider = riderById.get(standing.riderId);
@@ -65,6 +66,18 @@ export function createMiniStandings({
           ),
         );
       }
+
+      const gapToLeader = leaderPoints - standing.points;
+      const gap = el(
+        'span',
+        'mini-standings__gap',
+        gapToLeader === 0 ? '—' : `-${gapToLeader}`,
+      );
+      gap.title =
+        gapToLeader === 0
+          ? 'Leading the championship'
+          : `${gapToLeader} points behind the leader`;
+      score.append(gap);
 
       item.append(position, createRiderNumber(rider), name, score);
       fragment.append(item);

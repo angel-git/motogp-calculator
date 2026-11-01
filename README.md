@@ -55,8 +55,8 @@ Sprint and Grand Prix sessions have one dropdown per scoring position:
   trailing gap column shows how many points each rider is behind the leader.
 - On narrow screens the full standings table sits below the editor. A compact
   top-three summary sticks to the top of the viewport, showing each rider's
-  number, name, total, and simulated points, so the championship impact stays
-  visible while selecting riders.
+  number, name, total, simulated points, and gap to the leader, so the
+  championship impact stays visible while selecting riders.
 
 Only scoring positions are editable (the top 9 in a Sprint and the top 15 in a
 Grand Prix). Deeper classifications do not award points and are not modelled in

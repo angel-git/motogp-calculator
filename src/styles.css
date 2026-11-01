@@ -713,6 +713,14 @@ select {
   font-weight: 700;
 }
 
+.mini-standings__gap {
+  margin-left: auto;
+  padding-left: 0.25rem;
+  color: var(--text-dim);
+  font-size: 0.62rem;
+  font-weight: 600;
+}
+
 @media (min-width: 70rem) {
   .mini-standings {
     display: none;
@@ -741,6 +749,10 @@ select {
 
   .mini-standings__name {
     font-size: 0.65rem;
+  }
+
+  .mini-standings__gap {
+    font-size: 0.58rem;
   }
 }
 
