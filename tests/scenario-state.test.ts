@@ -349,7 +349,7 @@ describe('scenario store with the championship engine', () => {
     const jorgeFirst = first.standings.find(
       (standing) => standing.riderId === 'jorge-martin',
     );
-    expect(marcFirst).toMatchObject({ simulatedPoints: 9, points: 374 });
+    expect(marcFirst).toMatchObject({ simulatedPoints: 9, points: 408 });
     expect(jorgeFirst).toMatchObject({ simulatedPoints: 12, points: 367 });
 
     // Swapping two riders needs the second position cleared first, because a
@@ -367,7 +367,7 @@ describe('scenario store with the championship engine', () => {
 
     expect(
       second.standings.find((standing) => standing.riderId === 'marc-marquez'),
-    ).toMatchObject({ simulatedPoints: 12, points: 377 });
+    ).toMatchObject({ simulatedPoints: 12, points: 411 });
     expect(
       second.standings.find((standing) => standing.riderId === 'jorge-martin'),
     ).toMatchObject({ simulatedPoints: 9, points: 364 });
@@ -413,11 +413,11 @@ describe('scenario store with the championship engine', () => {
     );
 
     expect(projection.champion.riderId).toBe('marc-marquez');
-    expect(projection.pointsGap).toBe(12);
+    expect(projection.pointsGap).toBe(46);
     expect(
       projection.standings.find(
         (standing) => standing.riderId === 'marc-marquez',
       ),
-    ).toMatchObject({ simulatedPoints: 34, points: 399 });
+    ).toMatchObject({ simulatedPoints: 34, points: 433 });
   });
 });

@@ -12,19 +12,19 @@ const SPRINT = season2026.remainingEvents.find((event) => event.type === 'sprint
 const GRAND_PRIX = season2026.remainingEvents.find(
   (event) => event.type === 'grandPrix',
 )!;
-const ROUND_19 = season2026.remainingEvents.filter((event) => event.round === 19);
 const ROUND_20 = season2026.remainingEvents.filter((event) => event.round === 20);
+const ROUND_21 = season2026.remainingEvents.filter((event) => event.round === 21);
 
 function nextWeekSeason(): Season {
   return {
     ...season2026,
     meta: {
       ...season2026.meta,
-      standingsCutoff: '2026-10-31',
-      standingsCutoffRound: 19,
+      standingsCutoff: '2026-11-08',
+      standingsCutoffRound: 20,
     },
     remainingEvents: season2026.remainingEvents.filter(
-      (event) => event.round > 19,
+      (event) => event.round > 20,
     ),
   };
 }
@@ -81,8 +81,8 @@ describe('share URL encoding', () => {
   it('ignores events that are no longer on the remaining calendar', () => {
     const scenario: Scenario = {
       results: {
-        [ROUND_19[0].id]: ['marc-marquez'],
-        [ROUND_20[0].id]: ['jorge-martin'],
+        [ROUND_20[0].id]: ['marc-marquez'],
+        [ROUND_21[0].id]: ['jorge-martin'],
       },
     };
     const shared = new URL(
@@ -93,25 +93,25 @@ describe('share URL encoding', () => {
     const imported = parseShareSearch(shared.search, nextSeason);
 
     expect(imported.results).toEqual({
-      [ROUND_20[0].id]: ['jorge-martin'],
+      [ROUND_21[0].id]: ['jorge-martin'],
     });
     expect(imported.skippedEvents).toEqual([
-      { eventId: ROUND_19[0].id, reason: 'event-not-remaining' },
+      { eventId: ROUND_20[0].id, reason: 'event-not-remaining' },
     ]);
 
     const summary = summarizeShareImport(imported, nextSeason)!;
     expect(summary.tone).toBe('warning');
     expect(summary.message).toContain('already completed');
     expect(summary.message).toContain('official results');
-    expect(summary.message).toContain('after Round 18');
     expect(summary.message).toContain('after Round 19');
+    expect(summary.message).toContain('after Round 20');
   });
 
   it('explains when every shared session has since been completed', () => {
     const scenario: Scenario = {
       results: {
-        [ROUND_19[0].id]: ['marc-marquez'],
-        [ROUND_19[1].id]: ['jorge-martin'],
+        [ROUND_20[0].id]: ['marc-marquez'],
+        [ROUND_20[1].id]: ['jorge-martin'],
       },
     };
     const shared = new URL(

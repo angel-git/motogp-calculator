@@ -29,7 +29,7 @@ describe('2026 season data', () => {
     expect(season2026.year).toBe(2026);
     expect(season2026.riders).toHaveLength(32);
     expect(season2026.startingStandings).toHaveLength(32);
-    expect(season2026.remainingEvents).toHaveLength(8);
+    expect(season2026.remainingEvents).toHaveLength(6);
   });
 
   it('uses the official Sprint and Grand Prix points tables', () => {
@@ -40,8 +40,8 @@ describe('2026 season data', () => {
   });
 
   it('records the standings cutoff and sources', () => {
-    expect(season2026.meta.standingsCutoff).toBe('2026-10-24');
-    expect(season2026.meta.standingsCutoffRound).toBe(18);
+    expect(season2026.meta.standingsCutoff).toBe('2026-11-01');
+    expect(season2026.meta.standingsCutoffRound).toBe(19);
     expect(season2026.meta.standingsSource).toContain('resources.motogp.com');
     expect(season2026.meta.calendarSource).toContain('motogp.com');
   });
@@ -51,15 +51,15 @@ describe('2026 season data', () => {
       season2026.startingStandings.map((standing) => [standing.riderId, standing]),
     );
 
-    expect(standings.get('marc-marquez')).toMatchObject({ position: 1, points: 365 });
+    expect(standings.get('marc-marquez')).toMatchObject({ position: 1, points: 399 });
     expect(standings.get('jorge-martin')).toMatchObject({ position: 2, points: 355 });
-    expect(standings.get('marco-bezzecchi')).toMatchObject({ position: 3, points: 315 });
-    expect(standings.get('pedro-acosta')).toMatchObject({ position: 4, points: 263 });
-    expect(standings.get('ai-ogura')).toMatchObject({ position: 5, points: 259 });
+    expect(standings.get('marco-bezzecchi')).toMatchObject({ position: 3, points: 332 });
+    expect(standings.get('pedro-acosta')).toMatchObject({ position: 4, points: 295 });
+    expect(standings.get('ai-ogura')).toMatchObject({ position: 5, points: 278 });
 
-    // The official classification puts Marini ahead of Binder on countback.
-    expect(standings.get('luca-marini')).toMatchObject({ position: 12, points: 108 });
-    expect(standings.get('brad-binder')).toMatchObject({ position: 13, points: 108 });
+    // Bastianini's Malaysia points move him ahead of Aldeguer.
+    expect(standings.get('enea-bastianini')).toMatchObject({ position: 10, points: 134 });
+    expect(standings.get('fermin-aldeguer')).toMatchObject({ position: 11, points: 125 });
   });
 
   it('includes the rider colours used by the number badges', () => {
@@ -93,9 +93,9 @@ describe('2026 season data', () => {
     expect(byId.get('toprak-razgatlioglu')?.availableForRemainingEvents).toBe(false);
   });
 
-  it('contains the final four rounds, each with a Sprint and a Grand Prix', () => {
+  it('contains the final three rounds, each with a Sprint and a Grand Prix', () => {
     const rounds = [...new Set(season2026.remainingEvents.map((event) => event.round))];
-    expect(rounds).toEqual([19, 20, 21, 22]);
+    expect(rounds).toEqual([20, 21, 22]);
 
     for (const round of rounds) {
       const events = season2026.remainingEvents.filter((event) => event.round === round);
@@ -103,9 +103,9 @@ describe('2026 season data', () => {
     }
 
     expect(season2026.remainingEvents[0]).toMatchObject({
-      id: '2026-19-malaysia-sprint',
-      date: '2026-10-31',
-      circuit: 'Sepang International Circuit',
+      id: '2026-20-qatar-sprint',
+      date: '2026-11-07',
+      circuit: 'Lusail International Circuit',
     });
     expect(
       season2026.remainingEvents[season2026.remainingEvents.length - 1],
@@ -166,7 +166,7 @@ describe('scenario validation', () => {
   it('accepts a partial but valid result', () => {
     const issues = validateScenario(season2026, {
       results: {
-        '2026-19-malaysia-grand-prix': ['marc-marquez', 'jorge-martin'],
+        '2026-20-qatar-grand-prix': ['marc-marquez', 'jorge-martin'],
       },
     });
 
@@ -176,7 +176,7 @@ describe('scenario validation', () => {
   it('rejects unknown events, unknown riders, and duplicate riders', () => {
     const issues = validateScenario(season2026, {
       results: {
-        '2026-19-malaysia-grand-prix': [
+        '2026-20-qatar-grand-prix': [
           'marc-marquez',
           'marc-marquez',
           'not-a-rider',

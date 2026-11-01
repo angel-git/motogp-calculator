@@ -215,7 +215,7 @@ describe('calculateChampionship', () => {
     expect(projection.simulatedEvents).toEqual([]);
     expect(projection.champion.riderId).toBe('marc-marquez');
     expect(projection.runnerUp?.riderId).toBe('jorge-martin');
-    expect(projection.pointsGap).toBe(10);
+    expect(projection.pointsGap).toBe(44);
   });
 
   it('projects a manually verified 2026 scenario', () => {
@@ -224,8 +224,8 @@ describe('calculateChampionship', () => {
       season2026.remainingEvents,
       {
         results: {
-          '2026-19-malaysia-sprint': ['jorge-martin', 'marc-marquez'],
-          '2026-19-malaysia-grand-prix': ['marc-marquez', 'jorge-martin'],
+          '2026-20-qatar-sprint': ['jorge-martin', 'marc-marquez'],
+          '2026-20-qatar-grand-prix': ['marc-marquez', 'jorge-martin'],
         },
       },
       season2026.scoring,
@@ -238,13 +238,13 @@ describe('calculateChampionship', () => {
       (entry) => entry.riderId === 'jorge-martin',
     );
 
-    // Marc: 365 + 9 (Sprint P2) + 25 (GP win) = 399.
+    // Marc: 399 + 9 (Sprint P2) + 25 (GP win) = 433.
     // Jorge: 355 + 12 (Sprint win) + 20 (GP P2) = 387.
     expect(marc).toMatchObject({
       position: 1,
-      startingPoints: 365,
+      startingPoints: 399,
       simulatedPoints: 34,
-      points: 399,
+      points: 433,
     });
     expect(jorge).toMatchObject({
       position: 2,
@@ -253,10 +253,10 @@ describe('calculateChampionship', () => {
       points: 387,
     });
     expect(projection.champion.riderId).toBe('marc-marquez');
-    expect(projection.pointsGap).toBe(12);
+    expect(projection.pointsGap).toBe(46);
     expect(projection.simulatedEvents).toEqual([
-      '2026-19-malaysia-sprint',
-      '2026-19-malaysia-grand-prix',
+      '2026-20-qatar-sprint',
+      '2026-20-qatar-grand-prix',
     ]);
   });
 

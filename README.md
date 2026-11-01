@@ -71,9 +71,9 @@ DOM:
 - `championship.ts` adds simulated points to the starting standings and returns
   the projected order, champion, runner-up, and points gap.
 - `tiebreak.ts` implements countback: Grand Prix placings are compared first
-  (wins, then seconds, and so on), followed by Sprint placings. The checked-in
-  classification ranks Marini ahead of Binder on 108 points because of a Grand
-  Prix fifth place, which confirms that ordering.
+  (wins, then seconds, and so on), followed by Sprint placings. Its synthetic
+  cases in `tests/tiebreak.test.ts` cover the ordering independently of the
+  current season data.
 - Unsimulated events award nothing. Partial results score only the listed
   positions, so an unfilled position awards no points. If the data still cannot
   separate two riders, the cutoff order and then rider ID provide a
@@ -91,7 +91,7 @@ Each simulated session becomes one query parameter named after its event ID,
 with the rider IDs in finishing order:
 
 ```
-?p.2026-19-malaysia-sprint=marc-marquez,jorge-martin&p.2026-19-malaysia-grand-prix=marc-marquez
+?p.2026-20-qatar-sprint=marc-marquez,jorge-martin&p.2026-20-qatar-grand-prix=marc-marquez
 ```
 
 An underscore marks an unfilled position inside a partial result. The link also
