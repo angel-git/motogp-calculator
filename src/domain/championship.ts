@@ -25,11 +25,15 @@ function totalPoints(accumulator: Accumulator): number {
   return accumulator.startingPoints + accumulator.simulatedPoints;
 }
 
-function compareAccumulators(a: Accumulator, b: Accumulator): number {
-  const byPointsAndCountback = compareByPointsAndCountback(
-    { points: totalPoints(a), countback: a.countback },
-    { points: totalPoints(b), countback: b.countback },
-  );
+interface RankedRider {
+  riderId: RiderId;
+  startingPosition: number;
+  points: number;
+  countback: Countback;
+}
+
+function compareRankedRiders(a: RankedRider, b: RankedRider): number {
+  const byPointsAndCountback = compareByPointsAndCountback(a, b);
   if (byPointsAndCountback !== 0) {
     return byPointsAndCountback;
   }
@@ -42,6 +46,23 @@ function compareAccumulators(a: Accumulator, b: Accumulator): number {
     return a.startingPosition - b.startingPosition;
   }
   return a.riderId.localeCompare(b.riderId);
+}
+
+function compareAccumulators(a: Accumulator, b: Accumulator): number {
+  return compareRankedRiders(
+    {
+      riderId: a.riderId,
+      startingPosition: a.startingPosition,
+      points: totalPoints(a),
+      countback: a.countback,
+    },
+    {
+      riderId: b.riderId,
+      startingPosition: b.startingPosition,
+      points: totalPoints(b),
+      countback: b.countback,
+    },
+  );
 }
 
 /**
@@ -161,27 +182,42 @@ export function calculateChampionship(
 
   // Every unsimulated session can still be won by any rival, so a rival's
   // maximum possible total is their current points plus the winner's points
-  // from every remaining session. The leader is only mathematically safe when
-  // even that maximum stays strictly below the leader's current total (a tie
-  // could be decided against the leader on countback).
+  // from every remaining session. Reaching that maximum means winning every
+  // remaining session, which also fixes the rival's countback. The leader is
+  // only safe when no rival can overtake them on points, nor tie them and win
+  // the countback tie-break.
   const simulatedEventIds = new Set(simulatedEvents);
-  const maxRemainingPoints = events.reduce((total, event) => {
-    if (simulatedEventIds.has(event.id)) {
-      return total;
+  const remainingEvents = events.filter(
+    (event) => !simulatedEventIds.has(event.id),
+  );
+  const maxRemainingPoints = remainingEvents.reduce(
+    (total, event) => total + (pointsTable(event.type, scoringRules)[0] ?? 0),
+    0,
+  );
+
+  const championClinched = standings.slice(1).every((rival) => {
+    const rivalMaximum = rival.points + maxRemainingPoints;
+    if (rivalMaximum !== champion.points) {
+      return rivalMaximum < champion.points;
     }
-    return total + (pointsTable(event.type, scoringRules)[0] ?? 0);
-  }, 0);
-  const rivalMaximum = standings
-    .slice(1)
-    .reduce(
-      (maximum, standing) =>
-        Math.max(maximum, standing.points + maxRemainingPoints),
-      Number.NEGATIVE_INFINITY,
+
+    // The rival can only tie on points by winning every remaining session.
+    // Compare the resulting countbacks, falling back to the same cutoff and
+    // rider-ID order used to sort the standings.
+    const rivalCountback = remainingEvents.reduce(
+      (countback, event) => addFinishToCountback(countback, event.type, 1),
+      rival.countback,
     );
 
-  // TODO
-  // in case of draw, we need to take into account the countback from first against rival
-  const championClinched = champion.points > rivalMaximum;
+    return (
+      compareRankedRiders(champion, {
+        riderId: rival.riderId,
+        startingPosition: rival.startingPosition,
+        points: rivalMaximum,
+        countback: rivalCountback,
+      }) < 0
+    );
+  });
 
   return {
     standings,

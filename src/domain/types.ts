@@ -130,7 +130,9 @@ export interface ChampionshipProjection {
   pointsGap: number;
   /**
    * True when no other rider can overtake the champion, even by winning every
-   * remaining session and the leader scoring nothing more.
+   * remaining session and the leader scoring nothing more. Rivals who could
+   * only tie on points are compared on their countback after winning every
+   * remaining session.
    */
   championClinched: boolean;
   /** Simulated event IDs in calendar order. Empty results are ignored. */

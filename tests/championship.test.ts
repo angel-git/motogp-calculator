@@ -289,9 +289,40 @@ describe('calculateChampionship', () => {
       {},
     );
 
-    // A tie could be decided against the leader on countback.
-    // TODO this should take into account the countback
+    // A tie is decided on countback, and b's win in the remaining Grand Prix
+    // would give them the tie-break against a's empty record.
     expect(projection.championClinched).toBe(false);
+  });
+
+  it('clinches when the leader wins a points tie on countback', () => {
+    const projection = projectionFor(
+      [
+        standing(1, 'a', 100, { grandPrix: [2], sprint: [] }),
+        standing(2, 'b', 75),
+      ],
+      [event('gp-1', 'grandPrix')],
+      {},
+    );
+
+    // b can tie on 100 points, but the remaining win only gives them one
+    // Grand Prix win against a's two.
+    expect(projection.champion.riderId).toBe('a');
+    expect(projection.championClinched).toBe(true);
+  });
+
+  it('clinches after the final event when the leader wins the tie-break', () => {
+    const projection = projectionFor(
+      [
+        standing(1, 'a', 100, { grandPrix: [1], sprint: [] }),
+        standing(2, 'b', 100),
+      ],
+      [],
+      {},
+    );
+
+    // With no sessions left, b can only tie and a keeps the title on countback.
+    expect(projection.champion.riderId).toBe('a');
+    expect(projection.championClinched).toBe(true);
   });
 
   it('counts only unsimulated events as remaining points', () => {
