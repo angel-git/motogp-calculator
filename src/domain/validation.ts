@@ -74,20 +74,6 @@ function readString(
   return value;
 }
 
-function readBoolean(
-  record: UnknownRecord,
-  key: string,
-  path: string,
-  issues: string[],
-): boolean {
-  const value = record[key];
-  if (typeof value !== 'boolean') {
-    issues.push(`${path}.${key} must be a boolean`);
-    return false;
-  }
-  return value;
-}
-
 /** Read a lowercase `#rrggbb` colour, normalising the casing of the input. */
 function readColor(
   record: UnknownRecord,
@@ -252,7 +238,6 @@ function parseRiders(value: unknown, issues: string[]): Rider[] {
         team: '',
         constructor: '',
         country: '',
-        availableForRemainingEvents: false,
       };
     }
 
@@ -277,12 +262,6 @@ function parseRiders(value: unknown, issues: string[]): Rider[] {
       team: readString(entry, 'team', path, issues),
       constructor: readString(entry, 'constructor', path, issues),
       country: readString(entry, 'country', path, issues),
-      availableForRemainingEvents: readBoolean(
-        entry,
-        'availableForRemainingEvents',
-        path,
-        issues,
-      ),
     };
   });
 }

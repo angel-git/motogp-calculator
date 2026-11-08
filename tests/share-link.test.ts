@@ -128,7 +128,7 @@ describe('share URL encoding', () => {
     expect(summary.message).toContain('current official results');
   });
 
-  it('drops unknown and unavailable riders without losing later picks', () => {
+  it('drops unknown riders without losing later picks', () => {
     const search = new URLSearchParams({
       v: String(SHARE_LINK_VERSION),
       y: String(season2026.year),
@@ -139,15 +139,9 @@ describe('share URL encoding', () => {
     const imported = parseShareSearch(search, season2026);
 
     expect(imported.results).toEqual({
-      [SPRINT.id]: [null, null, 'marc-marquez'],
+      [SPRINT.id]: ['joan-mir', null, 'marc-marquez'],
     });
     expect(imported.skippedRiders).toEqual([
-      {
-        eventId: SPRINT.id,
-        position: 1,
-        riderId: 'joan-mir',
-        reason: 'unavailable-rider',
-      },
       {
         eventId: SPRINT.id,
         position: 2,
@@ -158,7 +152,7 @@ describe('share URL encoding', () => {
 
     const summary = summarizeShareImport(imported, season2026)!;
     expect(summary.tone).toBe('warning');
-    expect(summary.message).toContain('2 picks could not be applied');
+    expect(summary.message).toContain('1 pick could not be applied');
   });
 
   it('keeps the first of a duplicated rider and reports the duplicate', () => {
@@ -183,7 +177,6 @@ describe('share URL encoding', () => {
 
   it('ignores picks beyond the scoring positions', () => {
     const riders = season2026.riders
-      .filter((rider) => rider.availableForRemainingEvents)
       .slice(0, 16)
       .map((rider) => rider.id);
     const search = new URLSearchParams({

@@ -83,21 +83,6 @@ describe('2026 season data', () => {
     }
   });
 
-  it('marks the expected line-up for the remaining rounds', () => {
-    const byId = new Map(season2026.riders.map((rider) => [rider.id, rider]));
-
-    expect(season2026.riders.filter((rider) => rider.availableForRemainingEvents)).toHaveLength(
-      21,
-    );
-    expect(byId.get('fermin-aldeguer')?.availableForRemainingEvents).toBe(true);
-    expect(byId.get('augusto-fernandez')?.availableForRemainingEvents).toBe(true);
-    expect(byId.get('iker-lecuona')?.availableForRemainingEvents).toBe(false);
-    expect(byId.get('joan-mir')?.availableForRemainingEvents).toBe(false);
-    expect(byId.get('toprak-razgatlioglu')?.availableForRemainingEvents).toBe(false);
-    expect(byId.get('francesco-bagnaia')?.availableForRemainingEvents).toBe(false);
-    expect(byId.get('jake-dixon')?.availableForRemainingEvents).toBe(true);
-  });
-
   it('contains the final two rounds, each with a Sprint and a Grand Prix', () => {
     const rounds = [...new Set(season2026.remainingEvents.map((event) => event.round))];
     expect(rounds).toEqual([21, 22]);

@@ -198,7 +198,7 @@ export function createRaceEditor({
 }: RaceEditorOptions): HTMLElement {
   const root = el('div', 'race-editor');
   const editorRiders = sortRidersByStanding(
-    season.riders.filter((rider) => rider.availableForRemainingEvents),
+    season.riders,
     season.startingStandings,
   );
   const rounds = groupEventsByRound(season.remainingEvents);

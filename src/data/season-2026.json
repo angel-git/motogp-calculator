@@ -11,7 +11,7 @@
       "The Qatar Airways Grand Prix of Qatar weekend (Tissot Sprint on 7 November and Grand Prix on 8 November 2026) is included in the standings and has been removed from the remaining events.",
       "Starting points, positions, and countback totals are taken from the official MotoGP World Championship classification after the Qatar Grand Prix on 8 November 2026 (accessed 8 November 2026).",
       "Grand Prix countback is recorded through 21st place and Sprint countback through 9th place, the deepest classifications shown in the source. Trailing zeroes are omitted.",
-      "All 33 riders in the classification are listed. Riders marked unavailable for the remaining rounds are those not expected to be entered after the cutoff; they remain in the championship table with their points. The season-level availability flag cannot represent a single-round absence, such as the Yamaha teams withdrawing from Qatar for security reasons, Luca Marini missing the Qatar Grand Prix through illness, or Jake Dixon replacing the unwell Joan Mir at Qatar. Francesco Bagnaia is marked unavailable after fracturing his foot in the Qatar Sprint.",
+      "All 33 riders in the classification are listed with their points. Single-round absences are not represented in the data: the Yamaha teams withdrew from Qatar for security reasons, Luca Marini missed the Qatar Grand Prix through illness, Jake Dixon replaced the unwell Joan Mir at Qatar, and Francesco Bagnaia fractured his foot in the Qatar Sprint.",
       "Rider badge colours come from the MotoGP live timing feed (color and text_color). Riders absent from the current session use the colours of their team-mates from the same feed, or the official team colours when the team is not represented.",
       "The Qatar, Portuguese, and Valencian Grand Prix dates reflect the 15 March 2026 calendar revision."
     ]
@@ -55,7 +55,6 @@
       "team": "Ducati Lenovo Team",
       "constructor": "Ducati",
       "country": "Spain",
-      "availableForRemainingEvents": true,
       "color": "#ad0000",
       "textColor": "#ffffff"
     },
@@ -67,7 +66,6 @@
       "team": "Aprilia Racing",
       "constructor": "Aprilia",
       "country": "Spain",
-      "availableForRemainingEvents": true,
       "color": "#5f259f",
       "textColor": "#ffffff"
     },
@@ -79,7 +77,6 @@
       "team": "Aprilia Racing",
       "constructor": "Aprilia",
       "country": "Italy",
-      "availableForRemainingEvents": true,
       "color": "#5f259f",
       "textColor": "#ffffff"
     },
@@ -91,7 +88,6 @@
       "team": "Red Bull KTM Factory Racing",
       "constructor": "KTM",
       "country": "Spain",
-      "availableForRemainingEvents": true,
       "color": "#ff7e27",
       "textColor": "#383838"
     },
@@ -103,7 +99,6 @@
       "team": "SuperFile Trackhouse MotoGP Team",
       "constructor": "Aprilia",
       "country": "Japan",
-      "availableForRemainingEvents": true,
       "color": "#0086d6",
       "textColor": "#ffffff"
     },
@@ -115,7 +110,6 @@
       "team": "Pertamina Enduro VR46 Racing Team",
       "constructor": "Ducati",
       "country": "Italy",
-      "availableForRemainingEvents": true,
       "color": "#e1ff00",
       "textColor": "#383838"
     },
@@ -127,7 +121,6 @@
       "team": "SuperFile Trackhouse MotoGP Team",
       "constructor": "Aprilia",
       "country": "Spain",
-      "availableForRemainingEvents": true,
       "color": "#0086d6",
       "textColor": "#ffffff"
     },
@@ -139,7 +132,6 @@
       "team": "BK8 Gresini Racing MotoGP",
       "constructor": "Ducati",
       "country": "Spain",
-      "availableForRemainingEvents": true,
       "color": "#9baee4",
       "textColor": "#383838"
     },
@@ -151,7 +143,6 @@
       "team": "Ducati Lenovo Team",
       "constructor": "Ducati",
       "country": "Italy",
-      "availableForRemainingEvents": false,
       "color": "#ad0000",
       "textColor": "#ffffff"
     },
@@ -163,7 +154,6 @@
       "team": "BK8 Gresini Racing MotoGP",
       "constructor": "Ducati",
       "country": "Spain",
-      "availableForRemainingEvents": true,
       "color": "#9baee4",
       "textColor": "#383838"
     },
@@ -175,7 +165,6 @@
       "team": "Red Bull KTM Tech3",
       "constructor": "KTM",
       "country": "Italy",
-      "availableForRemainingEvents": true,
       "color": "#ff6600",
       "textColor": "#ffffff"
     },
@@ -187,7 +176,6 @@
       "team": "Honda HRC Castrol",
       "constructor": "Honda",
       "country": "Italy",
-      "availableForRemainingEvents": true,
       "color": "#e50000",
       "textColor": "#ffffff"
     },
@@ -199,7 +187,6 @@
       "team": "Red Bull KTM Factory Racing",
       "constructor": "KTM",
       "country": "South Africa",
-      "availableForRemainingEvents": true,
       "color": "#ff7e27",
       "textColor": "#383838"
     },
@@ -211,7 +198,6 @@
       "team": "Pro Honda LCR",
       "constructor": "Honda",
       "country": "Brazil",
-      "availableForRemainingEvents": true,
       "color": "#fafafa",
       "textColor": "#383838"
     },
@@ -223,7 +209,6 @@
       "team": "Monster Energy Yamaha MotoGP Team",
       "constructor": "Yamaha",
       "country": "France",
-      "availableForRemainingEvents": true,
       "color": "#0a2d82",
       "textColor": "#ffffff"
     },
@@ -235,7 +220,6 @@
       "team": "Pertamina Enduro VR46 Racing Team",
       "constructor": "Ducati",
       "country": "Italy",
-      "availableForRemainingEvents": true,
       "color": "#e1ff00",
       "textColor": "#383838"
     },
@@ -247,7 +231,6 @@
       "team": "Castrol Honda LCR",
       "constructor": "Honda",
       "country": "France",
-      "availableForRemainingEvents": true,
       "color": "#fafafa",
       "textColor": "#383838"
     },
@@ -259,7 +242,6 @@
       "team": "Honda HRC Castrol",
       "constructor": "Honda",
       "country": "Spain",
-      "availableForRemainingEvents": false,
       "color": "#e50000",
       "textColor": "#ffffff"
     },
@@ -271,7 +253,6 @@
       "team": "Prima Pramac Yamaha MotoGP",
       "constructor": "Yamaha",
       "country": "Australia",
-      "availableForRemainingEvents": true,
       "color": "#0046d3",
       "textColor": "#ffffff"
     },
@@ -283,7 +264,6 @@
       "team": "Monster Energy Yamaha MotoGP Team",
       "constructor": "Yamaha",
       "country": "Spain",
-      "availableForRemainingEvents": true,
       "color": "#0a2d82",
       "textColor": "#ffffff"
     },
@@ -295,7 +275,6 @@
       "team": "Prima Pramac Yamaha MotoGP",
       "constructor": "Yamaha",
       "country": "Turkey",
-      "availableForRemainingEvents": false,
       "color": "#0046d3",
       "textColor": "#ffffff"
     },
@@ -307,7 +286,6 @@
       "team": "Red Bull KTM Tech3",
       "constructor": "KTM",
       "country": "Spain",
-      "availableForRemainingEvents": true,
       "color": "#ff6600",
       "textColor": "#ffffff"
     },
@@ -319,7 +297,6 @@
       "team": "BK8 Gresini Racing MotoGP",
       "constructor": "Ducati",
       "country": "Spain",
-      "availableForRemainingEvents": false,
       "color": "#9baee4",
       "textColor": "#383838"
     },
@@ -331,7 +308,6 @@
       "team": "Prima Pramac Yamaha MotoGP",
       "constructor": "Yamaha",
       "country": "Spain",
-      "availableForRemainingEvents": true,
       "color": "#0046d3",
       "textColor": "#ffffff"
     },
@@ -343,7 +319,6 @@
       "team": "Red Bull KTM Tech3",
       "constructor": "KTM",
       "country": "Spain",
-      "availableForRemainingEvents": false,
       "color": "#ff6600",
       "textColor": "#ffffff"
     },
@@ -355,7 +330,6 @@
       "team": "Honda HRC Castrol",
       "constructor": "Honda",
       "country": "Thailand",
-      "availableForRemainingEvents": false,
       "color": "#e50000",
       "textColor": "#ffffff"
     },
@@ -367,7 +341,6 @@
       "team": "Honda HRC Castrol",
       "constructor": "Honda",
       "country": "Japan",
-      "availableForRemainingEvents": false,
       "color": "#e50000",
       "textColor": "#ffffff"
     },
@@ -379,7 +352,6 @@
       "team": "Castrol Honda LCR",
       "constructor": "Honda",
       "country": "United Kingdom",
-      "availableForRemainingEvents": false,
       "color": "#fafafa",
       "textColor": "#383838"
     },
@@ -391,7 +363,6 @@
       "team": "Red Bull KTM Tech3",
       "constructor": "KTM",
       "country": "Germany",
-      "availableForRemainingEvents": false,
       "color": "#ff6600",
       "textColor": "#ffffff"
     },
@@ -403,7 +374,6 @@
       "team": "Aprilia Racing",
       "constructor": "Aprilia",
       "country": "Italy",
-      "availableForRemainingEvents": false,
       "color": "#5f259f",
       "textColor": "#ffffff"
     },
@@ -415,7 +385,6 @@
       "team": "BK8 Gresini Racing MotoGP",
       "constructor": "Ducati",
       "country": "Italy",
-      "availableForRemainingEvents": false,
       "color": "#9baee4",
       "textColor": "#383838"
     },
@@ -427,7 +396,6 @@
       "team": "Honda HRC Castrol",
       "constructor": "Honda",
       "country": "Spain",
-      "availableForRemainingEvents": false,
       "color": "#e50000",
       "textColor": "#ffffff"
     },
@@ -439,7 +407,6 @@
       "team": "Honda HRC Castrol",
       "constructor": "Honda",
       "country": "United Kingdom",
-      "availableForRemainingEvents": true,
       "color": "#e50000",
       "textColor": "#ffffff"
     }

@@ -105,10 +105,10 @@ Unrelated query parameters are preserved.
 Shared predictions are applied against the data currently deployed. A session
 that has since been completed is no longer in `remainingEvents`, so its
 predictions are ignored and the official result is used instead. Individual
-picks for riders who are no longer in the remaining field are also dropped. The
-app shows a notice explaining what was applied and what was skipped, including
-when the link was made against an earlier standings cutoff. The URL is then
-rewritten to match what is actually shown.
+picks for unknown rider IDs are also dropped. The app shows a notice
+explaining what was applied and what was skipped, including when the link was
+made against an earlier standings cutoff. The URL is then rewritten to match
+what is actually shown.
 
 ## Production build
 
@@ -141,9 +141,7 @@ colours when the team is not represented.
    liveries change.
 4. Keep rider and event IDs stable; URLs and saved scenarios will rely on
    them. Add new riders/events rather than renaming existing IDs.
-5. Mark riders who will not take part in the remaining rounds with
-   `"availableForRemainingEvents": false`.
-6. Run `npm run test` and `npm run build`. Validation rejects duplicate IDs,
+5. Run `npm run test` and `npm run build`. Validation rejects duplicate IDs,
    unknown rider references, malformed points tables, events before the
    cutoff, and standings that are not in official order.
 

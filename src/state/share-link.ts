@@ -34,7 +34,6 @@ export type ShareEventSkipReason =
 
 export type ShareRiderSkipReason =
   | 'unknown-rider'
-  | 'unavailable-rider'
   | 'duplicate-rider'
   | 'out-of-range';
 
@@ -251,17 +250,6 @@ export function parseShareSearch(search: string, season: Season): ShareImport {
           position,
           riderId,
           reason: 'unknown-rider',
-        });
-        result.push(null);
-        return;
-      }
-
-      if (!rider.availableForRemainingEvents) {
-        imported.skippedRiders.push({
-          eventId,
-          position,
-          riderId,
-          reason: 'unavailable-rider',
         });
         result.push(null);
         return;

@@ -26,12 +26,6 @@ export interface Rider {
   team: string;
   constructor: string;
   country: string;
-  /**
-   * Whether the rider is expected to be entered for the remaining rounds at
-   * the data cutoff. Riders who are injured, replaced, or only made one-off
-   * appearances stay in the standings but are excluded from the race editor.
-   */
-  availableForRemainingEvents: boolean;
 }
 
 export interface Event {

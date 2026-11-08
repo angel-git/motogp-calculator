@@ -319,13 +319,12 @@ describe('rider availability helpers', () => {
 
   it('orders riders by their cutoff championship position', () => {
     const riders = sortRidersByStanding(
-      season2026.riders.filter((rider) => rider.availableForRemainingEvents),
+      season2026.riders,
       season2026.startingStandings,
     );
 
     expect(riders[0].id).toBe('marc-marquez');
     expect(riders[1].id).toBe('jorge-martin');
-    expect(riders.every((rider) => rider.availableForRemainingEvents)).toBe(true);
   });
 });
 
