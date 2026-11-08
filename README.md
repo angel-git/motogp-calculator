@@ -53,9 +53,10 @@ Sprint and Grand Prix sessions have one dropdown per scoring position:
 - The projected standings are recalculated from the starting standings plus the
   current scenario after every change. They are never stored separately. A
   trailing gap column shows how many points each rider is behind the leader.
-- When the leader can no longer be caught — even if a rival wins every remaining
-  session while the leader scores nothing — the leader row and the sticky
-  top-three card turn gold instead of red.
+- When the leader can no longer be caught — even if a rival takes the best
+  position still open in every session (including unfilled places in partly
+  simulated sessions) while the leader scores nothing — the leader row and the
+  sticky top-three card turn gold instead of red.
 - On narrow screens the full standings table sits below the editor. A compact
   top-three summary sticks to the top of the viewport, showing each rider's
   number, name, total, simulated points, and gap to the leader, so the

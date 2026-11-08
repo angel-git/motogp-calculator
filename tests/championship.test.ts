@@ -325,15 +325,107 @@ describe('calculateChampionship', () => {
     expect(projection.championClinched).toBe(true);
   });
 
-  it('counts only unsimulated events as remaining points', () => {
+  it('counts every open position as still available', () => {
     const projection = projectionFor(
       [standing(1, 'a', 100), standing(2, 'b', 90)],
       [event('gp-1', 'grandPrix'), event('sprint-1', 'sprint')],
       { 'gp-1': ['a'] },
     );
 
-    // a leads 125-90 and only the Sprint's 12 points are still available.
+    // a leads 125-90. b can still take the Grand Prix's open second place (20)
+    // and win the Sprint (12) for 122, which is still short of a's 125.
     expect(projection.championClinched).toBe(true);
+  });
+
+  it('does not clinch while unfilled positions remain in simulated sessions', () => {
+    // Jorge wins every remaining session, but only the winner is filled in.
+    // Marc can still take second place in those same sessions, which would
+    // give him enough points to take the title, so Jorge is not a
+    // mathematical champion yet.
+    const projection = calculateChampionship(
+      season2026.startingStandings,
+      season2026.remainingEvents,
+      {
+        results: {
+          '2026-21-portugal-sprint': ['jorge-martin'],
+          '2026-21-portugal-grand-prix': ['jorge-martin'],
+          '2026-22-valencia-sprint': ['jorge-martin'],
+          '2026-22-valencia-grand-prix': ['jorge-martin'],
+        },
+      },
+      season2026.scoring,
+    );
+
+    expect(projection.champion.riderId).toBe('jorge-martin');
+    expect(projection.champion.points).toBe(445);
+    expect(projection.championClinched).toBe(false);
+
+    // Filling second place for Marc in one Grand Prix is enough to put him
+    // ahead, which is exactly why Jorge cannot be crowned yet.
+    const marcSecond = calculateChampionship(
+      season2026.startingStandings,
+      season2026.remainingEvents,
+      {
+        results: {
+          '2026-21-portugal-sprint': ['jorge-martin'],
+          '2026-21-portugal-grand-prix': ['jorge-martin', 'marc-marquez'],
+          '2026-22-valencia-sprint': ['jorge-martin'],
+          '2026-22-valencia-grand-prix': ['jorge-martin'],
+        },
+      },
+      season2026.scoring,
+    );
+
+    expect(marcSecond.champion.riderId).toBe('marc-marquez');
+    expect(marcSecond.champion.points).toBe(451);
+  });
+
+  it('clinches once every scoring position of the remaining sessions is filled', () => {
+    // Every session is complete, so no result can change any more. Jorge wins
+    // all four and, with the lower places taken by the riders furthest behind,
+    // is now guaranteed the title.
+    const ridersFurthestBehind = [...season2026.startingStandings]
+      .filter((entry) => entry.riderId !== 'jorge-martin')
+      .sort(
+        (a, b) => a.points - b.points || a.position - b.position,
+      )
+      .map((entry) => entry.riderId);
+    const grandPrixOrder = [
+      'jorge-martin',
+      ...ridersFurthestBehind.slice(0, 14),
+    ];
+    const sprintOrder = ['jorge-martin', ...ridersFurthestBehind.slice(0, 8)];
+
+    const projection = calculateChampionship(
+      season2026.startingStandings,
+      season2026.remainingEvents,
+      {
+        results: {
+          '2026-21-portugal-sprint': sprintOrder,
+          '2026-21-portugal-grand-prix': grandPrixOrder,
+          '2026-22-valencia-sprint': sprintOrder,
+          '2026-22-valencia-grand-prix': grandPrixOrder,
+        },
+      },
+      season2026.scoring,
+    );
+
+    expect(projection.champion.riderId).toBe('jorge-martin');
+    expect(projection.championClinched).toBe(true);
+  });
+
+  it('does not clinch while an unfilled position can still outscore the leader', () => {
+    const projection = projectionFor(
+      [standing(1, 'a', 100), standing(2, 'b', 90)],
+      [event('gp-1', 'grandPrix'), event('gp-2', 'grandPrix')],
+      { 'gp-1': ['a'] },
+    );
+
+    // a wins the partly filled first Grand Prix (125), but b can still take
+    // second there (+20) and win the second race (+25) for 135. Treating the
+    // unfilled place as settled would wrongly crown a.
+    expect(projection.champion.riderId).toBe('a');
+    expect(projection.championClinched).toBe(false);
   });
 
   it('clinches after the leader wins the next Sprint and Grand Prix', () => {

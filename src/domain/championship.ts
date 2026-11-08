@@ -80,6 +80,9 @@ function compareAccumulators(a: Accumulator, b: Accumulator): number {
  *   keep their true finishing place.
  * - Sprint and Grand Prix results use their own points tables.
  * - Countback is updated with every listed finish and used to break ties.
+ * - A leader is a mathematical champion only when no rival can overtake them
+ *   by claiming the best position still open in every session, including
+ *   unfilled positions inside partly simulated sessions.
  *
  * An invalid scenario (unknown event or rider, duplicate rider, empty rider
  * ID) throws instead of producing a misleading projection.
@@ -180,35 +183,54 @@ export function calculateChampionship(
   const champion = standings[0];
   const runnerUp = standings[1] ?? null;
 
-  // Every unsimulated session can still be won by any rival, so a rival's
-  // maximum possible total is their current points plus the winner's points
-  // from every remaining session. Reaching that maximum means winning every
-  // remaining session, which also fixes the rival's countback. The leader is
-  // only safe when no rival can overtake them on points, nor tie them and win
-  // the countback tie-break.
-  const simulatedEventIds = new Set(simulatedEvents);
-  const remainingEvents = events.filter(
-    (event) => !simulatedEventIds.has(event.id),
-  );
-  const maxRemainingPoints = remainingEvents.reduce(
-    (total, event) => total + (pointsTable(event.type, scoringRules)[0] ?? 0),
-    0,
-  );
+  // A session that is only partly filled still leaves scoring positions open.
+  // A rival can claim the best unfilled position in every session they are not
+  // already classified in, so their maximum total is their current points plus
+  // those positions. Taking the best open position also fixes their countback
+  // in that session. The leader is only safe when no rival can overtake them on
+  // points, nor tie them and win the countback tie-break.
+  const openSessions = events.map((event) => ({
+    event,
+    points: pointsTable(event.type, scoringRules),
+    result: scenario.results[event.id] ?? [],
+  }));
 
   const championClinched = standings.slice(1).every((rival) => {
-    const rivalMaximum = rival.points + maxRemainingPoints;
+    let rivalMaximum = rival.points;
+    let rivalCountback = rival.countback;
+
+    for (const { event, points, result } of openSessions) {
+      // A rider already classified in a session cannot take a second place in
+      // it, and the points already awarded cannot be improved on.
+      if (result.includes(rival.riderId)) {
+        continue;
+      }
+
+      // Points tables are in descending order, so the first unfilled place is
+      // also the most valuable one still available.
+      const bestOpenIndex = points.findIndex(
+        (_positionPoints, index) =>
+          index >= result.length || result[index] === null,
+      );
+      if (bestOpenIndex === -1) {
+        continue;
+      }
+
+      rivalMaximum += points[bestOpenIndex];
+      rivalCountback = addFinishToCountback(
+        rivalCountback,
+        event.type,
+        bestOpenIndex + 1,
+      );
+    }
+
     if (rivalMaximum !== champion.points) {
       return rivalMaximum < champion.points;
     }
 
-    // The rival can only tie on points by winning every remaining session.
-    // Compare the resulting countbacks, falling back to the same cutoff and
-    // rider-ID order used to sort the standings.
-    const rivalCountback = remainingEvents.reduce(
-      (countback, event) => addFinishToCountback(countback, event.type, 1),
-      rival.countback,
-    );
-
+    // The rival can only tie on points by taking every best open position
+    // computed above. Compare the resulting countbacks, falling back to the
+    // same cutoff and rider-ID order used to sort the standings.
     return (
       compareRankedRiders(champion, {
         riderId: rival.riderId,
