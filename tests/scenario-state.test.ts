@@ -349,8 +349,8 @@ describe('scenario store with the championship engine', () => {
     const jorgeFirst = first.standings.find(
       (standing) => standing.riderId === 'jorge-martin',
     );
-    expect(marcFirst).toMatchObject({ simulatedPoints: 9, points: 408 });
-    expect(jorgeFirst).toMatchObject({ simulatedPoints: 12, points: 367 });
+    expect(marcFirst).toMatchObject({ simulatedPoints: 9, points: 440 });
+    expect(jorgeFirst).toMatchObject({ simulatedPoints: 12, points: 383 });
 
     // Swapping two riders needs the second position cleared first, because a
     // rider is never allowed to appear twice in the same event.
@@ -367,10 +367,10 @@ describe('scenario store with the championship engine', () => {
 
     expect(
       second.standings.find((standing) => standing.riderId === 'marc-marquez'),
-    ).toMatchObject({ simulatedPoints: 12, points: 411 });
+    ).toMatchObject({ simulatedPoints: 12, points: 443 });
     expect(
       second.standings.find((standing) => standing.riderId === 'jorge-martin'),
-    ).toMatchObject({ simulatedPoints: 9, points: 364 });
+    ).toMatchObject({ simulatedPoints: 9, points: 380 });
   });
 
   it('scores only filled positions of an incomplete event', () => {
@@ -389,7 +389,7 @@ describe('scenario store with the championship engine', () => {
       projection.standings.find(
         (standing) => standing.riderId === 'jorge-martin',
       ),
-    ).toMatchObject({ simulatedPoints: 12, points: 367 });
+    ).toMatchObject({ simulatedPoints: 12, points: 383 });
     expect(
       projection.standings.reduce(
         (total, standing) => total + standing.simulatedPoints,
@@ -413,11 +413,11 @@ describe('scenario store with the championship engine', () => {
     );
 
     expect(projection.champion.riderId).toBe('marc-marquez');
-    expect(projection.pointsGap).toBe(46);
+    expect(projection.pointsGap).toBe(62);
     expect(
       projection.standings.find(
         (standing) => standing.riderId === 'marc-marquez',
       ),
-    ).toMatchObject({ simulatedPoints: 34, points: 433 });
+    ).toMatchObject({ simulatedPoints: 34, points: 465 });
   });
 });

@@ -95,7 +95,7 @@ Each simulated session becomes one query parameter named after its event ID,
 with the rider IDs in finishing order:
 
 ```
-?p.2026-20-qatar-sprint=marc-marquez,jorge-martin&p.2026-20-qatar-grand-prix=marc-marquez
+?p.2026-21-portugal-sprint=marc-marquez,jorge-martin&p.2026-21-portugal-grand-prix=marc-marquez
 ```
 
 An underscore marks an unfilled position inside a partial result. The link also

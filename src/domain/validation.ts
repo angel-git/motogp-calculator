@@ -429,7 +429,7 @@ function parseEvents(
 
     const id = readString(entry, 'id', path, issues);
     if (id !== '' && !EVENT_ID_PATTERN.test(id)) {
-      issues.push(`${path}.id must start with the season year and round, for example "2026-20-qatar-sprint"`);
+      issues.push(`${path}.id must start with the season year and round, for example "2026-21-portugal-sprint"`);
     }
     if (id !== '' && seenIds.has(id)) {
       issues.push(`${path}.id duplicates event id "${id}"`);

@@ -215,7 +215,7 @@ describe('calculateChampionship', () => {
     expect(projection.simulatedEvents).toEqual([]);
     expect(projection.champion.riderId).toBe('marc-marquez');
     expect(projection.runnerUp?.riderId).toBe('jorge-martin');
-    expect(projection.pointsGap).toBe(44);
+    expect(projection.pointsGap).toBe(60);
     expect(projection.championClinched).toBe(false);
   });
 
@@ -225,8 +225,8 @@ describe('calculateChampionship', () => {
       season2026.remainingEvents,
       {
         results: {
-          '2026-20-qatar-sprint': ['jorge-martin', 'marc-marquez'],
-          '2026-20-qatar-grand-prix': ['marc-marquez', 'jorge-martin'],
+          '2026-21-portugal-sprint': ['jorge-martin', 'marc-marquez'],
+          '2026-21-portugal-grand-prix': ['marc-marquez', 'jorge-martin'],
         },
       },
       season2026.scoring,
@@ -239,25 +239,25 @@ describe('calculateChampionship', () => {
       (entry) => entry.riderId === 'jorge-martin',
     );
 
-    // Marc: 399 + 9 (Sprint P2) + 25 (GP win) = 433.
-    // Jorge: 355 + 12 (Sprint win) + 20 (GP P2) = 387.
+    // Marc: 431 + 9 (Sprint P2) + 25 (GP win) = 465.
+    // Jorge: 371 + 12 (Sprint win) + 20 (GP P2) = 403.
     expect(marc).toMatchObject({
       position: 1,
-      startingPoints: 399,
+      startingPoints: 431,
       simulatedPoints: 34,
-      points: 433,
+      points: 465,
     });
     expect(jorge).toMatchObject({
       position: 2,
-      startingPoints: 355,
+      startingPoints: 371,
       simulatedPoints: 32,
-      points: 387,
+      points: 403,
     });
     expect(projection.champion.riderId).toBe('marc-marquez');
-    expect(projection.pointsGap).toBe(46);
+    expect(projection.pointsGap).toBe(62);
     expect(projection.simulatedEvents).toEqual([
-      '2026-20-qatar-sprint',
-      '2026-20-qatar-grand-prix',
+      '2026-21-portugal-sprint',
+      '2026-21-portugal-grand-prix',
     ]);
   });
 
@@ -342,15 +342,15 @@ describe('calculateChampionship', () => {
       season2026.remainingEvents,
       {
         results: {
-          '2026-20-qatar-sprint': ['marc-marquez'],
-          '2026-20-qatar-grand-prix': ['marc-marquez'],
+          '2026-21-portugal-sprint': ['marc-marquez'],
+          '2026-21-portugal-grand-prix': ['marc-marquez'],
         },
       },
       season2026.scoring,
     );
 
     expect(clinched.champion.riderId).toBe('marc-marquez');
-    expect(clinched.champion.points).toBe(436);
+    expect(clinched.champion.points).toBe(468);
     expect(clinched.championClinched).toBe(true);
 
     const before = calculateChampionship(

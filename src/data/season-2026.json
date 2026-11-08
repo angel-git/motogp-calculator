@@ -1,17 +1,17 @@
 {
   "year": 2026,
   "meta": {
-    "standingsCutoff": "2026-11-01",
-    "standingsCutoffRound": 19,
-    "standingsCutoffLabel": "After Round 19, Petronas Grand Prix of Malaysia (1 November 2026)",
-    "standingsSource": "https://resources.motogp.com/files/results/2026/MAL/MotoGP/RAC/worldstanding.pdf",
+    "standingsCutoff": "2026-11-08",
+    "standingsCutoffRound": 20,
+    "standingsCutoffLabel": "After Round 20, Qatar Airways Grand Prix of Qatar (8 November 2026)",
+    "standingsSource": "https://resources.motogp.com/files/results/2026/QAT/MotoGP/RAC/worldstanding.pdf",
     "calendarSource": "https://www.motogp.com/en/calendar/2026",
     "notes": [
       "The Australian Grand Prix was cancelled; the Tissot Sprint held on 24 October 2026 is included in the standings.",
-      "The Petronas Grand Prix of Malaysia weekend (Tissot Sprint on 31 October and Grand Prix on 1 November 2026) is included in the standings and has been removed from the remaining events.",
-      "Starting points, positions, and countback totals are taken from the official MotoGP World Championship classification after the Malaysian Grand Prix on 1 November 2026 (accessed 1 November 2026).",
+      "The Qatar Airways Grand Prix of Qatar weekend (Tissot Sprint on 7 November and Grand Prix on 8 November 2026) is included in the standings and has been removed from the remaining events.",
+      "Starting points, positions, and countback totals are taken from the official MotoGP World Championship classification after the Qatar Grand Prix on 8 November 2026 (accessed 8 November 2026).",
       "Grand Prix countback is recorded through 21st place and Sprint countback through 9th place, the deepest classifications shown in the source. Trailing zeroes are omitted.",
-      "All 32 riders in the classification are listed. Riders marked unavailable for the remaining rounds are those not expected to be entered after the cutoff; they remain in the championship table with their points. The season-level availability flag cannot represent a single-round absence, such as Alex Márquez expected to miss Qatar for shoulder surgery before targeting a return in Portugal.",
+      "All 33 riders in the classification are listed. Riders marked unavailable for the remaining rounds are those not expected to be entered after the cutoff; they remain in the championship table with their points. The season-level availability flag cannot represent a single-round absence, such as the Yamaha teams withdrawing from Qatar for security reasons, Luca Marini missing the Qatar Grand Prix through illness, or Jake Dixon replacing the unwell Joan Mir at Qatar. Francesco Bagnaia is marked unavailable after fracturing his foot in the Qatar Sprint.",
       "Rider badge colours come from the MotoGP live timing feed (color and text_color). Riders absent from the current session use the colours of their team-mates from the same feed, or the official team colours when the team is not represented.",
       "The Qatar, Portuguese, and Valencian Grand Prix dates reflect the 15 March 2026 calendar revision."
     ]
@@ -151,7 +151,7 @@
       "team": "Ducati Lenovo Team",
       "constructor": "Ducati",
       "country": "Italy",
-      "availableForRemainingEvents": true,
+      "availableForRemainingEvents": false,
       "color": "#ad0000",
       "textColor": "#ffffff"
     },
@@ -430,17 +430,29 @@
       "availableForRemainingEvents": false,
       "color": "#e50000",
       "textColor": "#ffffff"
+    },
+    {
+      "id": "jake-dixon",
+      "name": "Jake Dixon",
+      "shortName": "J. Dixon",
+      "number": 96,
+      "team": "Honda HRC Castrol",
+      "constructor": "Honda",
+      "country": "United Kingdom",
+      "availableForRemainingEvents": true,
+      "color": "#e50000",
+      "textColor": "#ffffff"
     }
   ],
   "startingStandings": [
     {
       "position": 1,
       "riderId": "marc-marquez",
-      "points": 399,
+      "points": 431,
       "countback": {
         "grandPrix": [
           7,
-          0,
+          1,
           0,
           1,
           2,
@@ -448,7 +460,7 @@
           3
         ],
         "sprint": [
-          9,
+          10,
           3,
           1,
           0,
@@ -463,7 +475,7 @@
     {
       "position": 2,
       "riderId": "jorge-martin",
-      "points": 355,
+      "points": 371,
       "countback": {
         "grandPrix": [
           1,
@@ -472,14 +484,14 @@
           2,
           3,
           0,
-          0,
+          1,
           0,
           1
         ],
         "sprint": [
           4,
           1,
-          3,
+          4,
           1,
           4,
           2
@@ -489,10 +501,10 @@
     {
       "position": 3,
       "riderId": "marco-bezzecchi",
-      "points": 332,
+      "points": 357,
       "countback": {
         "grandPrix": [
-          5,
+          6,
           2,
           4,
           1,
@@ -515,7 +527,7 @@
     {
       "position": 4,
       "riderId": "pedro-acosta",
-      "points": 295,
+      "points": 309,
       "countback": {
         "grandPrix": [
           1,
@@ -523,7 +535,7 @@
           2,
           1,
           3,
-          1,
+          2,
           2,
           0,
           0,
@@ -535,7 +547,7 @@
           0,
           2,
           1,
-          3,
+          4,
           0,
           2,
           3
@@ -545,13 +557,13 @@
     {
       "position": 5,
       "riderId": "ai-ogura",
-      "points": 278,
+      "points": 294,
       "countback": {
         "grandPrix": [
           1,
           2,
           1,
-          5,
+          6,
           3,
           1,
           0,
@@ -564,7 +576,7 @@
           4,
           2,
           1,
-          1,
+          2,
           2
         ]
       }
@@ -572,7 +584,7 @@
     {
       "position": 6,
       "riderId": "fabio-di-giannantonio",
-      "points": 265,
+      "points": 282,
       "countback": {
         "grandPrix": [
           1,
@@ -582,7 +594,7 @@
           1,
           2,
           2,
-          2,
+          3,
           1,
           0,
           0,
@@ -596,7 +608,7 @@
         ],
         "sprint": [
           0,
-          1,
+          2,
           6,
           2,
           3,
@@ -609,12 +621,12 @@
     {
       "position": 7,
       "riderId": "raul-fernandez",
-      "points": 236,
+      "points": 258,
       "countback": {
         "grandPrix": [
           1,
           2,
-          2,
+          3,
           0,
           1,
           2,
@@ -634,7 +646,7 @@
           2,
           0,
           1,
-          2,
+          3,
           1,
           2,
           2,
@@ -704,14 +716,14 @@
     {
       "position": 10,
       "riderId": "enea-bastianini",
-      "points": 134,
+      "points": 147,
       "countback": {
         "grandPrix": [
           0,
           0,
           0,
           1,
-          1,
+          2,
           2,
           1,
           3,
@@ -731,7 +743,7 @@
           0,
           0,
           1,
-          2,
+          3,
           1
         ]
       }
@@ -739,7 +751,7 @@
     {
       "position": 11,
       "riderId": "fermin-aldeguer",
-      "points": 125,
+      "points": 129,
       "countback": {
         "grandPrix": [
           0,
@@ -752,6 +764,7 @@
           3,
           3,
           0,
+          1,
           1
         ],
         "sprint": [
@@ -910,7 +923,7 @@
     {
       "position": 16,
       "riderId": "franco-morbidelli",
-      "points": 65,
+      "points": 70,
       "countback": {
         "grandPrix": [
           0,
@@ -923,7 +936,7 @@
           1,
           0,
           2,
-          1,
+          2,
           2,
           3,
           5,
@@ -947,7 +960,7 @@
     {
       "position": 17,
       "riderId": "johann-zarco",
-      "points": 51,
+      "points": 63,
       "countback": {
         "grandPrix": [
           0,
@@ -958,7 +971,7 @@
           0,
           1,
           0,
-          1,
+          2,
           1,
           2,
           0,
@@ -976,7 +989,7 @@
           0,
           0,
           0,
-          1,
+          2,
           0,
           2,
           1,
@@ -1087,6 +1100,41 @@
     },
     {
       "position": 21,
+      "riderId": "iker-lecuona",
+      "points": 18,
+      "countback": {
+        "grandPrix": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "sprint": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2
+        ]
+      }
+    },
+    {
+      "position": 22,
       "riderId": "toprak-razgatlioglu",
       "points": 18,
       "countback": {
@@ -1116,9 +1164,9 @@
       }
     },
     {
-      "position": 22,
+      "position": 23,
       "riderId": "maverick-vinales",
-      "points": 14,
+      "points": 17,
       "countback": {
         "grandPrix": [
           0,
@@ -1133,7 +1181,7 @@
           0,
           1,
           0,
-          1,
+          2,
           2,
           2,
           1,
@@ -1141,41 +1189,6 @@
           1
         ],
         "sprint": []
-      }
-    },
-    {
-      "position": 23,
-      "riderId": "iker-lecuona",
-      "points": 11,
-      "countback": {
-        "grandPrix": [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1
-        ],
-        "sprint": [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1
-        ]
       }
     },
     {
@@ -1282,6 +1295,30 @@
     },
     {
       "position": 28,
+      "riderId": "jake-dixon",
+      "points": 2,
+      "countback": {
+        "grandPrix": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "sprint": []
+      }
+    },
+    {
+      "position": 29,
       "riderId": "cal-crutchlow",
       "points": 0,
       "countback": {
@@ -1308,7 +1345,7 @@
       }
     },
     {
-      "position": 29,
+      "position": 30,
       "riderId": "jonas-folger",
       "points": 0,
       "countback": {
@@ -1334,7 +1371,7 @@
       }
     },
     {
-      "position": 30,
+      "position": 31,
       "riderId": "lorenzo-savadori",
       "points": 0,
       "countback": {
@@ -1361,7 +1398,7 @@
       }
     },
     {
-      "position": 31,
+      "position": 32,
       "riderId": "michele-pirro",
       "points": 0,
       "countback": {
@@ -1390,7 +1427,7 @@
       }
     },
     {
-      "position": 32,
+      "position": 33,
       "riderId": "aleix-espargaro",
       "points": 0,
       "countback": {
@@ -1400,24 +1437,6 @@
     }
   ],
   "remainingEvents": [
-    {
-      "id": "2026-20-qatar-sprint",
-      "round": 20,
-      "name": "Qatar Airways Grand Prix of Qatar",
-      "circuit": "Lusail International Circuit",
-      "country": "Qatar",
-      "date": "2026-11-07",
-      "type": "sprint"
-    },
-    {
-      "id": "2026-20-qatar-grand-prix",
-      "round": 20,
-      "name": "Qatar Airways Grand Prix of Qatar",
-      "circuit": "Lusail International Circuit",
-      "country": "Qatar",
-      "date": "2026-11-08",
-      "type": "grandPrix"
-    },
     {
       "id": "2026-21-portugal-sprint",
       "round": 21,
